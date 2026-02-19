@@ -1,9 +1,17 @@
-#ifndef OPCUA_COLLECTION_H
-#define OPCUA_COLLECTION_H
+#ifndef COLLECTION_H
+#define COLLECTION_H
 
 #include <stdint.h>
 #include <open62541/server.h>
 
+typedef struct {
+    char * mqttClientId;
+    char * topic;
+    bool useJson;
+    bool useMqtt;     
+    int metaUpdateTime;
+    char * metaQueueName;
+} ServerConfig;
 /* Grouped NodeIds for OPC UA objects */
 typedef struct {
     UA_NodeId subConId;
@@ -31,6 +39,7 @@ typedef struct {
 typedef struct {
     NodeCollection nodes;
     PubSubIdentifiers identifiers;
+    ServerConfig config;
 } ServerContext;
 
 /* Function Signatures */
@@ -73,4 +82,4 @@ typedef struct {
 void Sub_IdCollection_clear(Sub_IdCollection * ids);
 void Sub_IdCollection_init(Sub_IdCollection *ids);
 char *Sub_IdCollection_toString(const Sub_IdCollection *ids);
-#endif // OPCUA_COLLECTION_H
+#endif 
