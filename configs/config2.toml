@@ -1,0 +1,2157 @@
+[[publishers]]
+name = "PLC0"
+publisherId = 10000
+
+[[publishers.writerGroups]]
+id = 100
+interval = 1000
+name = "Processors / CPU"
+
+[[publishers.writerGroups.dataSets]]
+writerId = 105
+name = "core_105"
+fields = [
+    { name = "coreThermalHeadroom", type = "Float" },
+    { name = "coreSustainedRate", type = "Float" },
+    { name = "coreBusWidth", type = "Float" },
+    { name = "coreResetTime", type = "Float" },
+    { name = "coreCoolingCapacity", type = "Float" },
+    { name = "coreFrequencyResponse", type = "Float" },
+    { name = "coreSeekTime", type = "Float" },
+    { name = "coreSwitchingSpeed", type = "Float" },
+    { name = "coreRefreshInterval", type = "Float" },
+    { name = "coreBootTime", type = "Float" },
+    { name = "coreErrorRate", type = "Float" },
+    { name = "coreAging", type = "Float" },
+    { name = "coreDieSize", type = "Float" },
+    { name = "coreConcurrency", type = "Float" },
+    { name = "coreQueueDepth", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 106
+name = "thread_106"
+fields = [
+    { name = "threadCurrent", type = "Float" },
+    { name = "threadRefreshInterval", type = "Float" },
+    { name = "threadFallTime", type = "Float" },
+    { name = "threadInductance", type = "Float" },
+    { name = "threadElectromagneticInterference", type = "Float" },
+    { name = "threadDrift", type = "Float" },
+    { name = "threadUptime", type = "Float" },
+    { name = "threadScalability", type = "Float" },
+    { name = "threadCapacitance", type = "Float" },
+    { name = "threadThroughputPerLane", type = "Float" },
+    { name = "threadVoltage", type = "Float" },
+    { name = "threadBootTime", type = "Float" },
+    { name = "threadParallelism", type = "Float" },
+    { name = "threadResistance", type = "Float" },
+    { name = "threadPowerDraw", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 104
+name = "opcode_104"
+fields = [
+    { name = "opcodeAvailability", type = "Float" },
+    { name = "opcodePhaseShift", type = "Float" },
+    { name = "opcodeBootTime", type = "Float" },
+    { name = "opcodeNegotiationSpeed", type = "Float" },
+    { name = "opcodeWearOut", type = "Float" },
+    { name = "opcodeWordSize", type = "Float" },
+    { name = "opcodeScalability", type = "Float" },
+    { name = "opcodeIdlePower", type = "Float" },
+    { name = "opcodeReliability", type = "Float" },
+    { name = "opcodePropagationDelay", type = "Float" },
+    { name = "opcodeVoltage", type = "Float" },
+    { name = "opcodeFallTime", type = "Float" },
+    { name = "opcodeShockResistance", type = "Float" },
+    { name = "opcodeEndurance", type = "Float" },
+    { name = "opcodeCapacitance", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 102
+name = "pipeline_102"
+fields = [
+    { name = "pipelineThroughputPerLane", type = "Float" },
+    { name = "pipelineThermalHeadroom", type = "Float" },
+    { name = "pipelineBufferSize", type = "Float" },
+    { name = "pipelineNegotiationSpeed", type = "Float" },
+    { name = "pipelineErrorCorrectionOverhead", type = "Float" },
+    { name = "pipelineFabricationYield", type = "Float" },
+    { name = "pipelineLatency", type = "Float" },
+    { name = "pipelineProcessNode", type = "Float" },
+    { name = "pipelineLatencyPerHop", type = "Float" },
+    { name = "pipelineInstructionSetWidth", type = "Float" },
+    { name = "pipelineDrift", type = "Float" },
+    { name = "pipelinePhaseShift", type = "Float" },
+    { name = "pipelineShockResistance", type = "Float" },
+    { name = "pipelineJitter", type = "Float" },
+    { name = "pipelineScalability", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 100
+name = "register_100"
+fields = [
+    { name = "registerPropagationDelay", type = "Float" },
+    { name = "registerQueueDepth", type = "Float" },
+    { name = "registerChecksumRate", type = "Float" },
+    { name = "registerSignalIntegrity", type = "Float" },
+    { name = "registerCacheLineLength", type = "Float" },
+    { name = "registerBurstLength", type = "Float" },
+    { name = "registerLatencyPerHop", type = "Float" },
+    { name = "registerPipelineDepth", type = "Float" },
+    { name = "registerInterconnectDensity", type = "Float" },
+    { name = "registerMeanTimeToRepair", type = "Float" },
+    { name = "registerActivePower", type = "Float" },
+    { name = "registerFallTime", type = "Float" },
+    { name = "registerCapacitance", type = "Float" },
+    { name = "registerFabricationYield", type = "Float" },
+    { name = "registerDataIntegrity", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 108
+name = "ALU_108"
+fields = [
+    { name = "ALUDrift", type = "Float" },
+    { name = "ALUBurstLength", type = "Float" },
+    { name = "ALUSeekTime", type = "Float" },
+    { name = "ALUSignalToNoiseRatio", type = "Float" },
+    { name = "ALUDutyCycle", type = "Float" },
+    { name = "ALUSustainedRate", type = "Float" },
+    { name = "ALURedundancy", type = "Float" },
+    { name = "ALUBufferSize", type = "Float" },
+    { name = "ALUPipelineDepth", type = "Float" },
+    { name = "ALUImpedance", type = "Float" },
+    { name = "ALUPerformancePerWatt", type = "Float" },
+    { name = "ALUVoltage", type = "Float" },
+    { name = "ALUElectromagneticInterference", type = "Float" },
+    { name = "ALUBandwidth", type = "Float" },
+    { name = "ALUBootTime", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 109
+name = "FPU_109"
+fields = [
+    { name = "FPUErrorRate", type = "Float" },
+    { name = "FPURiseTime", type = "Float" },
+    { name = "FPUElectromagneticInterference", type = "Float" },
+    { name = "FPUFabricationYield", type = "Float" },
+    { name = "FPUEfficiency", type = "Float" },
+    { name = "FPULatency", type = "Float" },
+    { name = "FPUFallTime", type = "Float" },
+    { name = "FPUDieSize", type = "Float" },
+    { name = "FPUPipelineDepth", type = "Float" },
+    { name = "FPUSeekTime", type = "Float" },
+    { name = "FPUMeanTimeToRepair", type = "Float" },
+    { name = "FPUVibrationTolerance", type = "Float" },
+    { name = "FPUThermalHeadroom", type = "Float" },
+    { name = "FPUBandwidth", type = "Float" },
+    { name = "FPUNoiseMargin", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 101
+name = "cache_101"
+fields = [
+    { name = "cacheBusWidth", type = "Float" },
+    { name = "cacheJitter", type = "Float" },
+    { name = "cacheCapacitance", type = "Float" },
+    { name = "cacheBufferSize", type = "Float" },
+    { name = "cacheBootTime", type = "Float" },
+    { name = "cacheSwitchingSpeed", type = "Float" },
+    { name = "cacheDrift", type = "Float" },
+    { name = "cacheHarmonicDistortion", type = "Float" },
+    { name = "cacheScalability", type = "Float" },
+    { name = "cacheIdlePower", type = "Float" },
+    { name = "cacheVibrationTolerance", type = "Float" },
+    { name = "cacheUtilization", type = "Float" },
+    { name = "cacheParallelism", type = "Float" },
+    { name = "cacheQueueDepth", type = "Float" },
+    { name = "cachePeakRate", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 103
+name = "instruction_103"
+fields = [
+    { name = "instructionCurrent", type = "Float" },
+    { name = "instructionErrorCorrectionOverhead", type = "Float" },
+    { name = "instructionCoolingCapacity", type = "Float" },
+    { name = "instructionResetTime", type = "Float" },
+    { name = "instructionBusWidth", type = "Float" },
+    { name = "instructionDieSize", type = "Float" },
+    { name = "instructionVibrationTolerance", type = "Float" },
+    { name = "instructionInterconnectDensity", type = "Float" },
+    { name = "instructionThroughputPerLane", type = "Float" },
+    { name = "instructionLatencyPerHop", type = "Float" },
+    { name = "instructionJitter", type = "Float" },
+    { name = "instructionParityCoverage", type = "Float" },
+    { name = "instructionSustainedRate", type = "Float" },
+    { name = "instructionPipelineDepth", type = "Float" },
+    { name = "instructionNoiseMargin", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 107
+name = "microcode_107"
+fields = [
+    { name = "microcodeUtilization", type = "Float" },
+    { name = "microcodeCacheLineLength", type = "Float" },
+    { name = "microcodePerformancePerWatt", type = "Float" },
+    { name = "microcodeRetentionTime", type = "Float" },
+    { name = "microcodeFallTime", type = "Float" },
+    { name = "microcodeRiseTime", type = "Float" },
+    { name = "microcodeBurstLength", type = "Float" },
+    { name = "microcodeChecksumRate", type = "Float" },
+    { name = "microcodeCycleTime", type = "Float" },
+    { name = "microcodeMeanTimeToRepair", type = "Float" },
+    { name = "microcodeErrorRate", type = "Float" },
+    { name = "microcodeBufferSize", type = "Float" },
+    { name = "microcodeHarmonicDistortion", type = "Float" },
+    { name = "microcodeDieSize", type = "Float" },
+    { name = "microcodeProcessNode", type = "Float" },
+]
+
+[[publishers.writerGroups]]
+id = 200
+interval = 1000
+name = "Memory"
+
+[[publishers.writerGroups.dataSets]]
+writerId = 204
+name = "DIMM_204"
+fields = [
+    { name = "DIMMSustainedRate", type = "Float" },
+    { name = "DIMMInterconnectDensity", type = "Float" },
+    { name = "DIMMShockResistance", type = "Float" },
+    { name = "DIMMPerformancePerWatt", type = "Float" },
+    { name = "DIMMFanSpeed", type = "Float" },
+    { name = "DIMMBufferSize", type = "Float" },
+    { name = "DIMMAccessTime", type = "Float" },
+    { name = "DIMMSeekTime", type = "Float" },
+    { name = "DIMMParallelism", type = "Float" },
+    { name = "DIMMCrosstalk", type = "Float" },
+    { name = "DIMMBurstLength", type = "Float" },
+    { name = "DIMMScalability", type = "Float" },
+    { name = "DIMMAirflow", type = "Float" },
+    { name = "DIMMThroughput", type = "Float" },
+    { name = "DIMMEndurance", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 209
+name = "refresh_209"
+fields = [
+    { name = "refreshSignalIntegrity", type = "Float" },
+    { name = "refreshJitter", type = "Float" },
+    { name = "refreshWordSize", type = "Float" },
+    { name = "refreshDrift", type = "Float" },
+    { name = "refreshCacheSize", type = "Float" },
+    { name = "refreshFallTime", type = "Float" },
+    { name = "refreshActivePower", type = "Float" },
+    { name = "refreshAvailability", type = "Float" },
+    { name = "refreshSignalToNoiseRatio", type = "Float" },
+    { name = "refreshPipelineDepth", type = "Float" },
+    { name = "refreshBandwidth", type = "Float" },
+    { name = "refreshClockSpeed", type = "Float" },
+    { name = "refreshResetTime", type = "Float" },
+    { name = "refreshShockResistance", type = "Float" },
+    { name = "refreshInterconnectDensity", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 205
+name = "address_205"
+fields = [
+    { name = "addressThroughput", type = "Float" },
+    { name = "addressRedundancy", type = "Float" },
+    { name = "addressUtilization", type = "Float" },
+    { name = "addressImpedance", type = "Float" },
+    { name = "addressIOPS", type = "Float" },
+    { name = "addressThermalDesignPower", type = "Float" },
+    { name = "addressVibrationTolerance", type = "Float" },
+    { name = "addressThroughputPerLane", type = "Float" },
+    { name = "addressFabricationYield", type = "Float" },
+    { name = "addressCoolingCapacity", type = "Float" },
+    { name = "addressInterconnectDensity", type = "Float" },
+    { name = "addressCapacitance", type = "Float" },
+    { name = "addressJitter", type = "Float" },
+    { name = "addressTransistorCount", type = "Float" },
+    { name = "addressCycleTime", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 202
+name = "EEPROM_202"
+fields = [
+    { name = "EEPROMNoiseMargin", type = "Float" },
+    { name = "EEPROMFaultTolerance", type = "Float" },
+    { name = "EEPROMUptime", type = "Float" },
+    { name = "EEPROMBusWidth", type = "Float" },
+    { name = "EEPROMFormFactor", type = "Float" },
+    { name = "EEPROMResistance", type = "Float" },
+    { name = "EEPROMCycleTime", type = "Float" },
+    { name = "EEPROMSleepPower", type = "Float" },
+    { name = "EEPROMErrorRate", type = "Float" },
+    { name = "EEPROMQueueDepth", type = "Float" },
+    { name = "EEPROMDieSize", type = "Float" },
+    { name = "EEPROMRegisterCount", type = "Float" },
+    { name = "EEPROMLatencyPerHop", type = "Float" },
+    { name = "EEPROMReliability", type = "Float" },
+    { name = "EEPROMVoltage", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 206
+name = "page_206"
+fields = [
+    { name = "pageResistance", type = "Float" },
+    { name = "pageBandwidth", type = "Float" },
+    { name = "pageReliability", type = "Float" },
+    { name = "pageSignalToNoiseRatio", type = "Float" },
+    { name = "pageSleepPower", type = "Float" },
+    { name = "pageBusWidth", type = "Float" },
+    { name = "pageCycleTime", type = "Float" },
+    { name = "pageResetTime", type = "Float" },
+    { name = "pageParallelism", type = "Float" },
+    { name = "pageFormFactor", type = "Float" },
+    { name = "pageThermalHeadroom", type = "Float" },
+    { name = "pageSignalIntegrity", type = "Float" },
+    { name = "pageActivePower", type = "Float" },
+    { name = "pageRegisterCount", type = "Float" },
+    { name = "pageSwitchingSpeed", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 201
+name = "SRAM_201"
+fields = [
+    { name = "SRAMAirflow", type = "Float" },
+    { name = "SRAMLatencyPerHop", type = "Float" },
+    { name = "SRAMRedundancy", type = "Float" },
+    { name = "SRAMClockSpeed", type = "Float" },
+    { name = "SRAMIOPS", type = "Float" },
+    { name = "SRAMMeanTimeToRepair", type = "Float" },
+    { name = "SRAMBootTime", type = "Float" },
+    { name = "SRAMNegotiationSpeed", type = "Float" },
+    { name = "SRAMRetentionTime", type = "Float" },
+    { name = "SRAMCrosstalk", type = "Float" },
+    { name = "SRAMPeakRate", type = "Float" },
+    { name = "SRAMInstructionSetWidth", type = "Float" },
+    { name = "SRAMCacheLineLength", type = "Float" },
+    { name = "SRAMFanSpeed", type = "Float" },
+    { name = "SRAMDrift", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 208
+name = "bandwidth_208"
+fields = [
+    { name = "bandwidthFrequencyResponse", type = "Float" },
+    { name = "bandwidthMeanTimeToRepair", type = "Float" },
+    { name = "bandwidthSleepPower", type = "Float" },
+    { name = "bandwidthProcessNode", type = "Float" },
+    { name = "bandwidthDieSize", type = "Float" },
+    { name = "bandwidthInterconnectDensity", type = "Float" },
+    { name = "bandwidthSustainedRate", type = "Float" },
+    { name = "bandwidthHandshakeDelay", type = "Float" },
+    { name = "bandwidthBufferSize", type = "Float" },
+    { name = "bandwidthSignalIntegrity", type = "Float" },
+    { name = "bandwidthBootTime", type = "Float" },
+    { name = "bandwidthRetentionTime", type = "Float" },
+    { name = "bandwidthImpedance", type = "Float" },
+    { name = "bandwidthNegotiationSpeed", type = "Float" },
+    { name = "bandwidthPhaseShift", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 207
+name = "latency_207"
+fields = [
+    { name = "latencyLatency", type = "Float" },
+    { name = "latencyFallTime", type = "Float" },
+    { name = "latencyPowerDraw", type = "Float" },
+    { name = "latencyPeakRate", type = "Float" },
+    { name = "latencyNoiseMargin", type = "Float" },
+    { name = "latencyCurrent", type = "Float" },
+    { name = "latencyRefreshInterval", type = "Float" },
+    { name = "latencyThroughput", type = "Float" },
+    { name = "latencyProcessNode", type = "Float" },
+    { name = "latencyUptime", type = "Float" },
+    { name = "latencyErrorCorrectionOverhead", type = "Float" },
+    { name = "latencyRedundancy", type = "Float" },
+    { name = "latencySustainedRate", type = "Float" },
+    { name = "latencyReliability", type = "Float" },
+    { name = "latencySeekTime", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 203
+name = "flash_203"
+fields = [
+    { name = "flashCycleTime", type = "Float" },
+    { name = "flashInductance", type = "Float" },
+    { name = "flashFallTime", type = "Float" },
+    { name = "flashParityCoverage", type = "Float" },
+    { name = "flashThroughputPerLane", type = "Float" },
+    { name = "flashProcessNode", type = "Float" },
+    { name = "flashBootTime", type = "Float" },
+    { name = "flashEfficiency", type = "Float" },
+    { name = "flashSwitchingSpeed", type = "Float" },
+    { name = "flashPropagationDelay", type = "Float" },
+    { name = "flashPhaseShift", type = "Float" },
+    { name = "flashBufferSize", type = "Float" },
+    { name = "flashDrift", type = "Float" },
+    { name = "flashHandshakeDelay", type = "Float" },
+    { name = "flashFaultTolerance", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 200
+name = "DRAM_200"
+fields = [
+    { name = "DRAMBusWidth", type = "Float" },
+    { name = "DRAMParallelism", type = "Float" },
+    { name = "DRAMQueueDepth", type = "Float" },
+    { name = "DRAMHeatDissipation", type = "Float" },
+    { name = "DRAMProcessNode", type = "Float" },
+    { name = "DRAMPerformancePerWatt", type = "Float" },
+    { name = "DRAMCapacitance", type = "Float" },
+    { name = "DRAMNegotiationSpeed", type = "Float" },
+    { name = "DRAMFallTime", type = "Float" },
+    { name = "DRAMHarmonicDistortion", type = "Float" },
+    { name = "DRAMTransistorCount", type = "Float" },
+    { name = "DRAMRegisterCount", type = "Float" },
+    { name = "DRAMDataIntegrity", type = "Float" },
+    { name = "DRAMPipelineDepth", type = "Float" },
+    { name = "DRAMPowerDraw", type = "Float" },
+]
+
+[[publishers.writerGroups]]
+id = 400
+interval = 1000
+name = "I/O & Buses"
+
+[[publishers.writerGroups.dataSets]]
+writerId = 403
+name = "Thunderbolt_403"
+fields = [
+    { name = "ThunderboltNegotiationSpeed", type = "Float" },
+    { name = "ThunderboltFallTime", type = "Float" },
+    { name = "ThunderboltClockSpeed", type = "Float" },
+    { name = "ThunderboltShockResistance", type = "Float" },
+    { name = "ThunderboltHandshakeDelay", type = "Float" },
+    { name = "ThunderboltVoltage", type = "Float" },
+    { name = "ThunderboltHeatDissipation", type = "Float" },
+    { name = "ThunderboltDrift", type = "Float" },
+    { name = "ThunderboltPeakRate", type = "Float" },
+    { name = "ThunderboltDieSize", type = "Float" },
+    { name = "ThunderboltEndurance", type = "Float" },
+    { name = "ThunderboltBusWidth", type = "Float" },
+    { name = "ThunderboltStability", type = "Float" },
+    { name = "ThunderboltPropagationDelay", type = "Float" },
+    { name = "ThunderboltScalability", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 408
+name = "channel_408"
+fields = [
+    { name = "channelUtilization", type = "Float" },
+    { name = "channelHeatDissipation", type = "Float" },
+    { name = "channelRetentionTime", type = "Float" },
+    { name = "channelErrorRate", type = "Float" },
+    { name = "channelSignalToNoiseRatio", type = "Float" },
+    { name = "channelElectromagneticInterference", type = "Float" },
+    { name = "channelVoltage", type = "Float" },
+    { name = "channelBusWidth", type = "Float" },
+    { name = "channelRedundancy", type = "Float" },
+    { name = "channelAging", type = "Float" },
+    { name = "channelParityCoverage", type = "Float" },
+    { name = "channelFabricationYield", type = "Float" },
+    { name = "channelShockResistance", type = "Float" },
+    { name = "channelVibrationTolerance", type = "Float" },
+    { name = "channelQueueDepth", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 401
+name = "USB_401"
+fields = [
+    { name = "USBInitializationOverhead", type = "Float" },
+    { name = "USBVibrationTolerance", type = "Float" },
+    { name = "USBInductance", type = "Float" },
+    { name = "USBPeakRate", type = "Float" },
+    { name = "USBLatency", type = "Float" },
+    { name = "USBParallelism", type = "Float" },
+    { name = "USBFormFactor", type = "Float" },
+    { name = "USBCycleTime", type = "Float" },
+    { name = "USBSeekTime", type = "Float" },
+    { name = "USBThroughput", type = "Float" },
+    { name = "USBEndurance", type = "Float" },
+    { name = "USBPerformancePerWatt", type = "Float" },
+    { name = "USBCacheLineLength", type = "Float" },
+    { name = "USBQueueDepth", type = "Float" },
+    { name = "USBWearOut", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 409
+name = "transceiver_409"
+fields = [
+    { name = "transceiverPeakRate", type = "Float" },
+    { name = "transceiverEfficiency", type = "Float" },
+    { name = "transceiverQueueDepth", type = "Float" },
+    { name = "transceiverResistance", type = "Float" },
+    { name = "transceiverPerformancePerWatt", type = "Float" },
+    { name = "transceiverChecksumRate", type = "Float" },
+    { name = "transceiverShockResistance", type = "Float" },
+    { name = "transceiverThroughput", type = "Float" },
+    { name = "transceiverBusWidth", type = "Float" },
+    { name = "transceiverSleepPower", type = "Float" },
+    { name = "transceiverPhaseShift", type = "Float" },
+    { name = "transceiverHandshakeDelay", type = "Float" },
+    { name = "transceiverSeekTime", type = "Float" },
+    { name = "transceiverAccessTime", type = "Float" },
+    { name = "transceiverAvailability", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 402
+name = "SATA_402"
+fields = [
+    { name = "SATAFaultTolerance", type = "Float" },
+    { name = "SATAScalability", type = "Float" },
+    { name = "SATASignalToNoiseRatio", type = "Float" },
+    { name = "SATABandwidth", type = "Float" },
+    { name = "SATARefreshInterval", type = "Float" },
+    { name = "SATAMeanTimeBetweenFailures", type = "Float" },
+    { name = "SATASwitchingSpeed", type = "Float" },
+    { name = "SATAInductance", type = "Float" },
+    { name = "SATAShockResistance", type = "Float" },
+    { name = "SATADutyCycle", type = "Float" },
+    { name = "SATADrift", type = "Float" },
+    { name = "SATARedundancy", type = "Float" },
+    { name = "SATARetentionTime", type = "Float" },
+    { name = "SATAPerformancePerWatt", type = "Float" },
+    { name = "SATAPeakRate", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 400
+name = "PCIe_400"
+fields = [
+    { name = "PCIeStability", type = "Float" },
+    { name = "PCIeAging", type = "Float" },
+    { name = "PCIeSwitchingSpeed", type = "Float" },
+    { name = "PCIeDutyCycle", type = "Float" },
+    { name = "PCIeLatencyPerHop", type = "Float" },
+    { name = "PCIeCapacitance", type = "Float" },
+    { name = "PCIeChecksumRate", type = "Float" },
+    { name = "PCIeElectromagneticInterference", type = "Float" },
+    { name = "PCIeEfficiency", type = "Float" },
+    { name = "PCIeQueueDepth", type = "Float" },
+    { name = "PCIeParityCoverage", type = "Float" },
+    { name = "PCIeFanSpeed", type = "Float" },
+    { name = "PCIePeakRate", type = "Float" },
+    { name = "PCIeTransferRate", type = "Float" },
+    { name = "PCIeScalability", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 407
+name = "interrupt_407"
+fields = [
+    { name = "interruptResistance", type = "Float" },
+    { name = "interruptInitializationOverhead", type = "Float" },
+    { name = "interruptSustainedRate", type = "Float" },
+    { name = "interruptRedundancy", type = "Float" },
+    { name = "interruptAging", type = "Float" },
+    { name = "interruptTransistorCount", type = "Float" },
+    { name = "interruptCacheLineLength", type = "Float" },
+    { name = "interruptAvailability", type = "Float" },
+    { name = "interruptUtilization", type = "Float" },
+    { name = "interruptSignalIntegrity", type = "Float" },
+    { name = "interruptShockResistance", type = "Float" },
+    { name = "interruptVoltage", type = "Float" },
+    { name = "interruptBandwidth", type = "Float" },
+    { name = "interruptBootTime", type = "Float" },
+    { name = "interruptUptime", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 405
+name = "lane_405"
+fields = [
+    { name = "laneBootTime", type = "Float" },
+    { name = "laneImpedance", type = "Float" },
+    { name = "laneResistance", type = "Float" },
+    { name = "laneEfficiency", type = "Float" },
+    { name = "laneReliability", type = "Float" },
+    { name = "laneErrorCorrectionOverhead", type = "Float" },
+    { name = "laneRedundancy", type = "Float" },
+    { name = "laneBurstLength", type = "Float" },
+    { name = "laneCacheSize", type = "Float" },
+    { name = "laneDataIntegrity", type = "Float" },
+    { name = "laneTransistorCount", type = "Float" },
+    { name = "laneRiseTime", type = "Float" },
+    { name = "laneFrequencyResponse", type = "Float" },
+    { name = "laneFabricationYield", type = "Float" },
+    { name = "laneFaultTolerance", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 406
+name = "DMA_406"
+fields = [
+    { name = "DMAInductance", type = "Float" },
+    { name = "DMAMeanTimeToRepair", type = "Float" },
+    { name = "DMAFaultTolerance", type = "Float" },
+    { name = "DMAImpedance", type = "Float" },
+    { name = "DMAIdlePower", type = "Float" },
+    { name = "DMAThroughput", type = "Float" },
+    { name = "DMAHarmonicDistortion", type = "Float" },
+    { name = "DMAActivePower", type = "Float" },
+    { name = "DMACrosstalk", type = "Float" },
+    { name = "DMAWearOut", type = "Float" },
+    { name = "DMAInitializationOverhead", type = "Float" },
+    { name = "DMASleepPower", type = "Float" },
+    { name = "DMABandwidth", type = "Float" },
+    { name = "DMAQueueDepth", type = "Float" },
+    { name = "DMAThermalDesignPower", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 404
+name = "bus_404"
+fields = [
+    { name = "busClockSpeed", type = "Float" },
+    { name = "busIdlePower", type = "Float" },
+    { name = "busErrorCorrectionOverhead", type = "Float" },
+    { name = "busTransferRate", type = "Float" },
+    { name = "busImpedance", type = "Float" },
+    { name = "busErrorRate", type = "Float" },
+    { name = "busPowerDraw", type = "Float" },
+    { name = "busWordSize", type = "Float" },
+    { name = "busJitter", type = "Float" },
+    { name = "busRiseTime", type = "Float" },
+    { name = "busTransistorCount", type = "Float" },
+    { name = "busConcurrency", type = "Float" },
+    { name = "busWearOut", type = "Float" },
+    { name = "busAvailability", type = "Float" },
+    { name = "busNegotiationSpeed", type = "Float" },
+]
+
+[[publishers.writerGroups]]
+id = 300
+interval = 1000
+name = "Storage"
+
+[[publishers.writerGroups.dataSets]]
+writerId = 304
+name = "block_304"
+fields = [
+    { name = "blockProcessNode", type = "Float" },
+    { name = "blockBurstLength", type = "Float" },
+    { name = "blockSleepPower", type = "Float" },
+    { name = "blockThermalDesignPower", type = "Float" },
+    { name = "blockSignalIntegrity", type = "Float" },
+    { name = "blockAccessTime", type = "Float" },
+    { name = "blockPowerDraw", type = "Float" },
+    { name = "blockUtilization", type = "Float" },
+    { name = "blockThroughput", type = "Float" },
+    { name = "blockBandwidth", type = "Float" },
+    { name = "blockFaultTolerance", type = "Float" },
+    { name = "blockPeakRate", type = "Float" },
+    { name = "blockPipelineDepth", type = "Float" },
+    { name = "blockAging", type = "Float" },
+    { name = "blockBusWidth", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 302
+name = "spindle_302"
+fields = [
+    { name = "spindlePropagationDelay", type = "Float" },
+    { name = "spindleShockResistance", type = "Float" },
+    { name = "spindleRefreshInterval", type = "Float" },
+    { name = "spindleWearOut", type = "Float" },
+    { name = "spindleEndurance", type = "Float" },
+    { name = "spindleAvailability", type = "Float" },
+    { name = "spindleBootTime", type = "Float" },
+    { name = "spindleResetTime", type = "Float" },
+    { name = "spindleJitter", type = "Float" },
+    { name = "spindleInterconnectDensity", type = "Float" },
+    { name = "spindleDutyCycle", type = "Float" },
+    { name = "spindleSignalToNoiseRatio", type = "Float" },
+    { name = "spindleUptime", type = "Float" },
+    { name = "spindleThermalHeadroom", type = "Float" },
+    { name = "spindleLatencyPerHop", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 306
+name = "partition_306"
+fields = [
+    { name = "partitionTransferRate", type = "Float" },
+    { name = "partitionResetTime", type = "Float" },
+    { name = "partitionScalability", type = "Float" },
+    { name = "partitionBusWidth", type = "Float" },
+    { name = "partitionHeatDissipation", type = "Float" },
+    { name = "partitionReliability", type = "Float" },
+    { name = "partitionHandshakeDelay", type = "Float" },
+    { name = "partitionSeekTime", type = "Float" },
+    { name = "partitionRedundancy", type = "Float" },
+    { name = "partitionDieSize", type = "Float" },
+    { name = "partitionCacheSize", type = "Float" },
+    { name = "partitionUtilization", type = "Float" },
+    { name = "partitionErrorCorrectionOverhead", type = "Float" },
+    { name = "partitionParallelism", type = "Float" },
+    { name = "partitionAvailability", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 307
+name = "filesystem_307"
+fields = [
+    { name = "filesystemRiseTime", type = "Float" },
+    { name = "filesystemVibrationTolerance", type = "Float" },
+    { name = "filesystemEndurance", type = "Float" },
+    { name = "filesystemBurstLength", type = "Float" },
+    { name = "filesystemMeanTimeBetweenFailures", type = "Float" },
+    { name = "filesystemThermalHeadroom", type = "Float" },
+    { name = "filesystemErrorRate", type = "Float" },
+    { name = "filesystemPerformancePerWatt", type = "Float" },
+    { name = "filesystemCurrent", type = "Float" },
+    { name = "filesystemDutyCycle", type = "Float" },
+    { name = "filesystemPropagationDelay", type = "Float" },
+    { name = "filesystemProcessNode", type = "Float" },
+    { name = "filesystemWearOut", type = "Float" },
+    { name = "filesystemHeatDissipation", type = "Float" },
+    { name = "filesystemFabricationYield", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 301
+name = "platter_301"
+fields = [
+    { name = "platterSwitchingSpeed", type = "Float" },
+    { name = "platterQueueDepth", type = "Float" },
+    { name = "platterDutyCycle", type = "Float" },
+    { name = "platterReliability", type = "Float" },
+    { name = "platterParallelism", type = "Float" },
+    { name = "platterUtilization", type = "Float" },
+    { name = "platterVibrationTolerance", type = "Float" },
+    { name = "platterSeekTime", type = "Float" },
+    { name = "platterShockResistance", type = "Float" },
+    { name = "platterTransistorCount", type = "Float" },
+    { name = "platterThroughputPerLane", type = "Float" },
+    { name = "platterChecksumRate", type = "Float" },
+    { name = "platterWordSize", type = "Float" },
+    { name = "platterAirflow", type = "Float" },
+    { name = "platterCacheLineLength", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 300
+name = "sector_300"
+fields = [
+    { name = "sectorPropagationDelay", type = "Float" },
+    { name = "sectorMeanTimeToRepair", type = "Float" },
+    { name = "sectorBootTime", type = "Float" },
+    { name = "sectorRetentionTime", type = "Float" },
+    { name = "sectorPhaseShift", type = "Float" },
+    { name = "sectorHandshakeDelay", type = "Float" },
+    { name = "sectorUtilization", type = "Float" },
+    { name = "sectorRedundancy", type = "Float" },
+    { name = "sectorErrorRate", type = "Float" },
+    { name = "sectorSwitchingSpeed", type = "Float" },
+    { name = "sectorImpedance", type = "Float" },
+    { name = "sectorInterconnectDensity", type = "Float" },
+    { name = "sectorParallelism", type = "Float" },
+    { name = "sectorPerformancePerWatt", type = "Float" },
+    { name = "sectorSignalToNoiseRatio", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 309
+name = "controller_309"
+fields = [
+    { name = "controllerIdlePower", type = "Float" },
+    { name = "controllerNoiseMargin", type = "Float" },
+    { name = "controllerNegotiationSpeed", type = "Float" },
+    { name = "controllerSeekTime", type = "Float" },
+    { name = "controllerElectromagneticInterference", type = "Float" },
+    { name = "controllerBusWidth", type = "Float" },
+    { name = "controllerBufferSize", type = "Float" },
+    { name = "controllerMeanTimeBetweenFailures", type = "Float" },
+    { name = "controllerCapacitance", type = "Float" },
+    { name = "controllerFallTime", type = "Float" },
+    { name = "controllerHeatDissipation", type = "Float" },
+    { name = "controllerBandwidth", type = "Float" },
+    { name = "controllerLatency", type = "Float" },
+    { name = "controllerShockResistance", type = "Float" },
+    { name = "controllerScalability", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 303
+name = "NAND_303"
+fields = [
+    { name = "NANDBandwidth", type = "Float" },
+    { name = "NANDPeakRate", type = "Float" },
+    { name = "NANDPhaseShift", type = "Float" },
+    { name = "NANDCapacitance", type = "Float" },
+    { name = "NANDResetTime", type = "Float" },
+    { name = "NANDErrorRate", type = "Float" },
+    { name = "NANDEndurance", type = "Float" },
+    { name = "NANDPowerDraw", type = "Float" },
+    { name = "NANDTransferRate", type = "Float" },
+    { name = "NANDQueueDepth", type = "Float" },
+    { name = "NANDDataIntegrity", type = "Float" },
+    { name = "NANDConcurrency", type = "Float" },
+    { name = "NANDPerformancePerWatt", type = "Float" },
+    { name = "NANDBootTime", type = "Float" },
+    { name = "NANDBurstLength", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 308
+name = "IOPS_308"
+fields = [
+    { name = "IOPSThroughputPerLane", type = "Float" },
+    { name = "IOPSCoolingCapacity", type = "Float" },
+    { name = "IOPSCapacitance", type = "Float" },
+    { name = "IOPSInductance", type = "Float" },
+    { name = "IOPSWordSize", type = "Float" },
+    { name = "IOPSCurrent", type = "Float" },
+    { name = "IOPSAvailability", type = "Float" },
+    { name = "IOPSResetTime", type = "Float" },
+    { name = "IOPSScalability", type = "Float" },
+    { name = "IOPSThermalHeadroom", type = "Float" },
+    { name = "IOPSInitializationOverhead", type = "Float" },
+    { name = "IOPSDataIntegrity", type = "Float" },
+    { name = "IOPSRetentionTime", type = "Float" },
+    { name = "IOPSIdlePower", type = "Float" },
+    { name = "IOPSLatencyPerHop", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 305
+name = "cluster_305"
+fields = [
+    { name = "clusterBandwidth", type = "Float" },
+    { name = "clusterThermalDesignPower", type = "Float" },
+    { name = "clusterBootTime", type = "Float" },
+    { name = "clusterBurstLength", type = "Float" },
+    { name = "clusterJitter", type = "Float" },
+    { name = "clusterDutyCycle", type = "Float" },
+    { name = "clusterChecksumRate", type = "Float" },
+    { name = "clusterQueueDepth", type = "Float" },
+    { name = "clusterEndurance", type = "Float" },
+    { name = "clusterIOPS", type = "Float" },
+    { name = "clusterFormFactor", type = "Float" },
+    { name = "clusterCacheLineLength", type = "Float" },
+    { name = "clusterCapacitance", type = "Float" },
+    { name = "clusterInductance", type = "Float" },
+    { name = "clusterPropagationDelay", type = "Float" },
+]
+
+[[publishers.writerGroups]]
+id = 500
+interval = 1000
+name = "Power & Electronics"
+
+[[publishers.writerGroups.dataSets]]
+writerId = 500
+name = "transistor_500"
+fields = [
+    { name = "transistorInitializationOverhead", type = "Float" },
+    { name = "transistorSignalToNoiseRatio", type = "Float" },
+    { name = "transistorPhaseShift", type = "Float" },
+    { name = "transistorParallelism", type = "Float" },
+    { name = "transistorAging", type = "Float" },
+    { name = "transistorFanSpeed", type = "Float" },
+    { name = "transistorJitter", type = "Float" },
+    { name = "transistorPropagationDelay", type = "Float" },
+    { name = "transistorResetTime", type = "Float" },
+    { name = "transistorStability", type = "Float" },
+    { name = "transistorVoltage", type = "Float" },
+    { name = "transistorBurstLength", type = "Float" },
+    { name = "transistorScalability", type = "Float" },
+    { name = "transistorSleepPower", type = "Float" },
+    { name = "transistorIdlePower", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 508
+name = "oscillator_508"
+fields = [
+    { name = "oscillatorLatencyPerHop", type = "Float" },
+    { name = "oscillatorHarmonicDistortion", type = "Float" },
+    { name = "oscillatorRefreshInterval", type = "Float" },
+    { name = "oscillatorSleepPower", type = "Float" },
+    { name = "oscillatorEfficiency", type = "Float" },
+    { name = "oscillatorImpedance", type = "Float" },
+    { name = "oscillatorRiseTime", type = "Float" },
+    { name = "oscillatorAirflow", type = "Float" },
+    { name = "oscillatorWearOut", type = "Float" },
+    { name = "oscillatorAccessTime", type = "Float" },
+    { name = "oscillatorClockSpeed", type = "Float" },
+    { name = "oscillatorIdlePower", type = "Float" },
+    { name = "oscillatorDieSize", type = "Float" },
+    { name = "oscillatorVoltage", type = "Float" },
+    { name = "oscillatorBusWidth", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 503
+name = "inductor_503"
+fields = [
+    { name = "inductorDataIntegrity", type = "Float" },
+    { name = "inductorEfficiency", type = "Float" },
+    { name = "inductorCacheSize", type = "Float" },
+    { name = "inductorWearOut", type = "Float" },
+    { name = "inductorVibrationTolerance", type = "Float" },
+    { name = "inductorNegotiationSpeed", type = "Float" },
+    { name = "inductorRiseTime", type = "Float" },
+    { name = "inductorBootTime", type = "Float" },
+    { name = "inductorProcessNode", type = "Float" },
+    { name = "inductorAccessTime", type = "Float" },
+    { name = "inductorAirflow", type = "Float" },
+    { name = "inductorConcurrency", type = "Float" },
+    { name = "inductorBandwidth", type = "Float" },
+    { name = "inductorThroughput", type = "Float" },
+    { name = "inductorScalability", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 505
+name = "MOSFET_505"
+fields = [
+    { name = "MOSFETCacheLineLength", type = "Float" },
+    { name = "MOSFETHarmonicDistortion", type = "Float" },
+    { name = "MOSFETWearOut", type = "Float" },
+    { name = "MOSFETBusWidth", type = "Float" },
+    { name = "MOSFETInterconnectDensity", type = "Float" },
+    { name = "MOSFETClockSpeed", type = "Float" },
+    { name = "MOSFETEfficiency", type = "Float" },
+    { name = "MOSFETBurstLength", type = "Float" },
+    { name = "MOSFETParityCoverage", type = "Float" },
+    { name = "MOSFETUtilization", type = "Float" },
+    { name = "MOSFETJitter", type = "Float" },
+    { name = "MOSFETVibrationTolerance", type = "Float" },
+    { name = "MOSFETSwitchingSpeed", type = "Float" },
+    { name = "MOSFETRefreshInterval", type = "Float" },
+    { name = "MOSFETCapacitance", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 507
+name = "clock_507"
+fields = [
+    { name = "clockBootTime", type = "Float" },
+    { name = "clockDrift", type = "Float" },
+    { name = "clockTransistorCount", type = "Float" },
+    { name = "clockPerformancePerWatt", type = "Float" },
+    { name = "clockInductance", type = "Float" },
+    { name = "clockRedundancy", type = "Float" },
+    { name = "clockTransferRate", type = "Float" },
+    { name = "clockErrorRate", type = "Float" },
+    { name = "clockPhaseShift", type = "Float" },
+    { name = "clockResetTime", type = "Float" },
+    { name = "clockElectromagneticInterference", type = "Float" },
+    { name = "clockIOPS", type = "Float" },
+    { name = "clockFrequencyResponse", type = "Float" },
+    { name = "clockPropagationDelay", type = "Float" },
+    { name = "clockCapacitance", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 504
+name = "resistor_504"
+fields = [
+    { name = "resistorHeatDissipation", type = "Float" },
+    { name = "resistorCacheLineLength", type = "Float" },
+    { name = "resistorParityCoverage", type = "Float" },
+    { name = "resistorHarmonicDistortion", type = "Float" },
+    { name = "resistorUptime", type = "Float" },
+    { name = "resistorThroughputPerLane", type = "Float" },
+    { name = "resistorResetTime", type = "Float" },
+    { name = "resistorCurrent", type = "Float" },
+    { name = "resistorLatencyPerHop", type = "Float" },
+    { name = "resistorSustainedRate", type = "Float" },
+    { name = "resistorClockSpeed", type = "Float" },
+    { name = "resistorEfficiency", type = "Float" },
+    { name = "resistorErrorRate", type = "Float" },
+    { name = "resistorRiseTime", type = "Float" },
+    { name = "resistorPeakRate", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 502
+name = "capacitor_502"
+fields = [
+    { name = "capacitorSustainedRate", type = "Float" },
+    { name = "capacitorCapacitance", type = "Float" },
+    { name = "capacitorCrosstalk", type = "Float" },
+    { name = "capacitorConcurrency", type = "Float" },
+    { name = "capacitorParityCoverage", type = "Float" },
+    { name = "capacitorFabricationYield", type = "Float" },
+    { name = "capacitorWearOut", type = "Float" },
+    { name = "capacitorInterconnectDensity", type = "Float" },
+    { name = "capacitorLatency", type = "Float" },
+    { name = "capacitorReliability", type = "Float" },
+    { name = "capacitorPerformancePerWatt", type = "Float" },
+    { name = "capacitorDataIntegrity", type = "Float" },
+    { name = "capacitorSignalToNoiseRatio", type = "Float" },
+    { name = "capacitorAvailability", type = "Float" },
+    { name = "capacitorDrift", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 506
+name = "voltage regulator_506"
+fields = [
+    { name = "voltage regulatorReliability", type = "Float" },
+    { name = "voltage regulatorResistance", type = "Float" },
+    { name = "voltage regulatorRetentionTime", type = "Float" },
+    { name = "voltage regulatorEfficiency", type = "Float" },
+    { name = "voltage regulatorSignalIntegrity", type = "Float" },
+    { name = "voltage regulatorVibrationTolerance", type = "Float" },
+    { name = "voltage regulatorActivePower", type = "Float" },
+    { name = "voltage regulatorErrorCorrectionOverhead", type = "Float" },
+    { name = "voltage regulatorResetTime", type = "Float" },
+    { name = "voltage regulatorElectromagneticInterference", type = "Float" },
+    { name = "voltage regulatorDataIntegrity", type = "Float" },
+    { name = "voltage regulatorProcessNode", type = "Float" },
+    { name = "voltage regulatorRedundancy", type = "Float" },
+    { name = "voltage regulatorRegisterCount", type = "Float" },
+    { name = "voltage regulatorFanSpeed", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 509
+name = "power supply_509"
+fields = [
+    { name = "power supplyInitializationOverhead", type = "Float" },
+    { name = "power supplyBufferSize", type = "Float" },
+    { name = "power supplyCycleTime", type = "Float" },
+    { name = "power supplyProcessNode", type = "Float" },
+    { name = "power supplyRetentionTime", type = "Float" },
+    { name = "power supplyVoltage", type = "Float" },
+    { name = "power supplyShockResistance", type = "Float" },
+    { name = "power supplyThroughputPerLane", type = "Float" },
+    { name = "power supplyPeakRate", type = "Float" },
+    { name = "power supplyInstructionSetWidth", type = "Float" },
+    { name = "power supplyChecksumRate", type = "Float" },
+    { name = "power supplyNoiseMargin", type = "Float" },
+    { name = "power supplyAccessTime", type = "Float" },
+    { name = "power supplyDieSize", type = "Float" },
+    { name = "power supplyPipelineDepth", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 501
+name = "diode_501"
+fields = [
+    { name = "diodeActivePower", type = "Float" },
+    { name = "diodeDutyCycle", type = "Float" },
+    { name = "diodeInductance", type = "Float" },
+    { name = "diodeEndurance", type = "Float" },
+    { name = "diodeFanSpeed", type = "Float" },
+    { name = "diodeResetTime", type = "Float" },
+    { name = "diodeCurrent", type = "Float" },
+    { name = "diodeCycleTime", type = "Float" },
+    { name = "diodeErrorRate", type = "Float" },
+    { name = "diodeRegisterCount", type = "Float" },
+    { name = "diodeTransferRate", type = "Float" },
+    { name = "diodeReliability", type = "Float" },
+    { name = "diodeShockResistance", type = "Float" },
+    { name = "diodeConcurrency", type = "Float" },
+    { name = "diodeRetentionTime", type = "Float" },
+]
+
+[[publishers]]
+name = "PLC1"
+publisherId = 20000
+
+[[publishers.writerGroups]]
+id = 200
+interval = 1000
+name = "Memory"
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1200
+name = "DRAM_1200"
+fields = [
+    { name = "DRAMEndurance", type = "Float" },
+    { name = "DRAMIOPS", type = "Float" },
+    { name = "DRAMRedundancy", type = "Float" },
+    { name = "DRAMPowerDraw", type = "Float" },
+    { name = "DRAMVoltage", type = "Float" },
+    { name = "DRAMErrorRate", type = "Float" },
+    { name = "DRAMAccessTime", type = "Float" },
+    { name = "DRAMCycleTime", type = "Float" },
+    { name = "DRAMQueueDepth", type = "Float" },
+    { name = "DRAMBurstLength", type = "Float" },
+    { name = "DRAMFanSpeed", type = "Float" },
+    { name = "DRAMJitter", type = "Float" },
+    { name = "DRAMResistance", type = "Float" },
+    { name = "DRAMAirflow", type = "Float" },
+    { name = "DRAMScalability", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1205
+name = "address_1205"
+fields = [
+    { name = "addressScalability", type = "Float" },
+    { name = "addressShockResistance", type = "Float" },
+    { name = "addressWearOut", type = "Float" },
+    { name = "addressNegotiationSpeed", type = "Float" },
+    { name = "addressCurrent", type = "Float" },
+    { name = "addressThroughput", type = "Float" },
+    { name = "addressThermalHeadroom", type = "Float" },
+    { name = "addressSeekTime", type = "Float" },
+    { name = "addressErrorRate", type = "Float" },
+    { name = "addressErrorCorrectionOverhead", type = "Float" },
+    { name = "addressFabricationYield", type = "Float" },
+    { name = "addressSleepPower", type = "Float" },
+    { name = "addressFallTime", type = "Float" },
+    { name = "addressLatency", type = "Float" },
+    { name = "addressEfficiency", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1203
+name = "flash_1203"
+fields = [
+    { name = "flashQueueDepth", type = "Float" },
+    { name = "flashInstructionSetWidth", type = "Float" },
+    { name = "flashBufferSize", type = "Float" },
+    { name = "flashHandshakeDelay", type = "Float" },
+    { name = "flashBootTime", type = "Float" },
+    { name = "flashBurstLength", type = "Float" },
+    { name = "flashAging", type = "Float" },
+    { name = "flashPropagationDelay", type = "Float" },
+    { name = "flashFaultTolerance", type = "Float" },
+    { name = "flashTransferRate", type = "Float" },
+    { name = "flashCacheSize", type = "Float" },
+    { name = "flashResistance", type = "Float" },
+    { name = "flashHeatDissipation", type = "Float" },
+    { name = "flashStability", type = "Float" },
+    { name = "flashJitter", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1209
+name = "refresh_1209"
+fields = [
+    { name = "refreshAging", type = "Float" },
+    { name = "refreshWordSize", type = "Float" },
+    { name = "refreshSeekTime", type = "Float" },
+    { name = "refreshSwitchingSpeed", type = "Float" },
+    { name = "refreshConcurrency", type = "Float" },
+    { name = "refreshNegotiationSpeed", type = "Float" },
+    { name = "refreshRefreshInterval", type = "Float" },
+    { name = "refreshPhaseShift", type = "Float" },
+    { name = "refreshElectromagneticInterference", type = "Float" },
+    { name = "refreshSignalIntegrity", type = "Float" },
+    { name = "refreshAirflow", type = "Float" },
+    { name = "refreshVoltage", type = "Float" },
+    { name = "refreshScalability", type = "Float" },
+    { name = "refreshRiseTime", type = "Float" },
+    { name = "refreshPerformancePerWatt", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1207
+name = "latency_1207"
+fields = [
+    { name = "latencyDataIntegrity", type = "Float" },
+    { name = "latencyPropagationDelay", type = "Float" },
+    { name = "latencySustainedRate", type = "Float" },
+    { name = "latencyNoiseMargin", type = "Float" },
+    { name = "latencyProcessNode", type = "Float" },
+    { name = "latencyAirflow", type = "Float" },
+    { name = "latencyShockResistance", type = "Float" },
+    { name = "latencyBandwidth", type = "Float" },
+    { name = "latencyDutyCycle", type = "Float" },
+    { name = "latencyWordSize", type = "Float" },
+    { name = "latencyHarmonicDistortion", type = "Float" },
+    { name = "latencyFormFactor", type = "Float" },
+    { name = "latencyUptime", type = "Float" },
+    { name = "latencyRedundancy", type = "Float" },
+    { name = "latencyInterconnectDensity", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1204
+name = "DIMM_1204"
+fields = [
+    { name = "DIMMCurrent", type = "Float" },
+    { name = "DIMMPeakRate", type = "Float" },
+    { name = "DIMMBufferSize", type = "Float" },
+    { name = "DIMMEndurance", type = "Float" },
+    { name = "DIMMFanSpeed", type = "Float" },
+    { name = "DIMMLatency", type = "Float" },
+    { name = "DIMMFaultTolerance", type = "Float" },
+    { name = "DIMMCapacitance", type = "Float" },
+    { name = "DIMMParityCoverage", type = "Float" },
+    { name = "DIMMAccessTime", type = "Float" },
+    { name = "DIMMSignalToNoiseRatio", type = "Float" },
+    { name = "DIMMElectromagneticInterference", type = "Float" },
+    { name = "DIMMThermalDesignPower", type = "Float" },
+    { name = "DIMMBusWidth", type = "Float" },
+    { name = "DIMMNegotiationSpeed", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1206
+name = "page_1206"
+fields = [
+    { name = "pagePeakRate", type = "Float" },
+    { name = "pageCurrent", type = "Float" },
+    { name = "pageThermalDesignPower", type = "Float" },
+    { name = "pageTransistorCount", type = "Float" },
+    { name = "pageDataIntegrity", type = "Float" },
+    { name = "pageThermalHeadroom", type = "Float" },
+    { name = "pagePropagationDelay", type = "Float" },
+    { name = "pagePowerDraw", type = "Float" },
+    { name = "pageQueueDepth", type = "Float" },
+    { name = "pageThroughput", type = "Float" },
+    { name = "pageParityCoverage", type = "Float" },
+    { name = "pageProcessNode", type = "Float" },
+    { name = "pageJitter", type = "Float" },
+    { name = "pageVibrationTolerance", type = "Float" },
+    { name = "pageTransferRate", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1201
+name = "SRAM_1201"
+fields = [
+    { name = "SRAMProcessNode", type = "Float" },
+    { name = "SRAMQueueDepth", type = "Float" },
+    { name = "SRAMSignalToNoiseRatio", type = "Float" },
+    { name = "SRAMVoltage", type = "Float" },
+    { name = "SRAMTransferRate", type = "Float" },
+    { name = "SRAMSignalIntegrity", type = "Float" },
+    { name = "SRAMParallelism", type = "Float" },
+    { name = "SRAMFrequencyResponse", type = "Float" },
+    { name = "SRAMSwitchingSpeed", type = "Float" },
+    { name = "SRAMActivePower", type = "Float" },
+    { name = "SRAMBootTime", type = "Float" },
+    { name = "SRAMPeakRate", type = "Float" },
+    { name = "SRAMPhaseShift", type = "Float" },
+    { name = "SRAMImpedance", type = "Float" },
+    { name = "SRAMAccessTime", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1202
+name = "EEPROM_1202"
+fields = [
+    { name = "EEPROMElectromagneticInterference", type = "Float" },
+    { name = "EEPROMPeakRate", type = "Float" },
+    { name = "EEPROMBandwidth", type = "Float" },
+    { name = "EEPROMQueueDepth", type = "Float" },
+    { name = "EEPROMSleepPower", type = "Float" },
+    { name = "EEPROMReliability", type = "Float" },
+    { name = "EEPROMDrift", type = "Float" },
+    { name = "EEPROMJitter", type = "Float" },
+    { name = "EEPROMBufferSize", type = "Float" },
+    { name = "EEPROMThermalHeadroom", type = "Float" },
+    { name = "EEPROMHandshakeDelay", type = "Float" },
+    { name = "EEPROMCoolingCapacity", type = "Float" },
+    { name = "EEPROMRegisterCount", type = "Float" },
+    { name = "EEPROMInductance", type = "Float" },
+    { name = "EEPROMScalability", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1208
+name = "bandwidth_1208"
+fields = [
+    { name = "bandwidthStability", type = "Float" },
+    { name = "bandwidthAvailability", type = "Float" },
+    { name = "bandwidthRefreshInterval", type = "Float" },
+    { name = "bandwidthUtilization", type = "Float" },
+    { name = "bandwidthRetentionTime", type = "Float" },
+    { name = "bandwidthThroughput", type = "Float" },
+    { name = "bandwidthRedundancy", type = "Float" },
+    { name = "bandwidthMeanTimeToRepair", type = "Float" },
+    { name = "bandwidthLatency", type = "Float" },
+    { name = "bandwidthConcurrency", type = "Float" },
+    { name = "bandwidthDrift", type = "Float" },
+    { name = "bandwidthInductance", type = "Float" },
+    { name = "bandwidthScalability", type = "Float" },
+    { name = "bandwidthInitializationOverhead", type = "Float" },
+    { name = "bandwidthSignalIntegrity", type = "Float" },
+]
+
+[[publishers.writerGroups]]
+id = 700
+interval = 1000
+name = "Graphics / Accelerators"
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1701
+name = "rasterizer_1701"
+fields = [
+    { name = "rasterizerPropagationDelay", type = "Float" },
+    { name = "rasterizerAirflow", type = "Float" },
+    { name = "rasterizerPowerDraw", type = "Float" },
+    { name = "rasterizerCacheLineLength", type = "Float" },
+    { name = "rasterizerNoiseMargin", type = "Float" },
+    { name = "rasterizerPipelineDepth", type = "Float" },
+    { name = "rasterizerSustainedRate", type = "Float" },
+    { name = "rasterizerCycleTime", type = "Float" },
+    { name = "rasterizerWearOut", type = "Float" },
+    { name = "rasterizerFormFactor", type = "Float" },
+    { name = "rasterizerDataIntegrity", type = "Float" },
+    { name = "rasterizerDrift", type = "Float" },
+    { name = "rasterizerAvailability", type = "Float" },
+    { name = "rasterizerUptime", type = "Float" },
+    { name = "rasterizerShockResistance", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1702
+name = "framebuffer_1702"
+fields = [
+    { name = "framebufferCacheSize", type = "Float" },
+    { name = "framebufferBufferSize", type = "Float" },
+    { name = "framebufferAirflow", type = "Float" },
+    { name = "framebufferPerformancePerWatt", type = "Float" },
+    { name = "framebufferQueueDepth", type = "Float" },
+    { name = "framebufferHandshakeDelay", type = "Float" },
+    { name = "framebufferVibrationTolerance", type = "Float" },
+    { name = "framebufferThermalDesignPower", type = "Float" },
+    { name = "framebufferProcessNode", type = "Float" },
+    { name = "framebufferCacheLineLength", type = "Float" },
+    { name = "framebufferAging", type = "Float" },
+    { name = "framebufferThermalHeadroom", type = "Float" },
+    { name = "framebufferFallTime", type = "Float" },
+    { name = "framebufferRedundancy", type = "Float" },
+    { name = "framebufferLatencyPerHop", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1705
+name = "texture_1705"
+fields = [
+    { name = "textureVoltage", type = "Float" },
+    { name = "textureInductance", type = "Float" },
+    { name = "textureRetentionTime", type = "Float" },
+    { name = "textureNoiseMargin", type = "Float" },
+    { name = "textureBusWidth", type = "Float" },
+    { name = "textureSustainedRate", type = "Float" },
+    { name = "textureFallTime", type = "Float" },
+    { name = "textureBandwidth", type = "Float" },
+    { name = "texturePipelineDepth", type = "Float" },
+    { name = "textureProcessNode", type = "Float" },
+    { name = "textureMeanTimeBetweenFailures", type = "Float" },
+    { name = "textureReliability", type = "Float" },
+    { name = "textureCycleTime", type = "Float" },
+    { name = "texturePeakRate", type = "Float" },
+    { name = "textureAging", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1703
+name = "GPU_1703"
+fields = [
+    { name = "GPUFanSpeed", type = "Float" },
+    { name = "GPUSustainedRate", type = "Float" },
+    { name = "GPUFallTime", type = "Float" },
+    { name = "GPUPropagationDelay", type = "Float" },
+    { name = "GPUTransferRate", type = "Float" },
+    { name = "GPUPhaseShift", type = "Float" },
+    { name = "GPUBusWidth", type = "Float" },
+    { name = "GPUImpedance", type = "Float" },
+    { name = "GPUReliability", type = "Float" },
+    { name = "GPUInitializationOverhead", type = "Float" },
+    { name = "GPUSeekTime", type = "Float" },
+    { name = "GPUDutyCycle", type = "Float" },
+    { name = "GPURegisterCount", type = "Float" },
+    { name = "GPUElectromagneticInterference", type = "Float" },
+    { name = "GPUConcurrency", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1706
+name = "pipeline_1706"
+fields = [
+    { name = "pipelineDataIntegrity", type = "Float" },
+    { name = "pipelineEfficiency", type = "Float" },
+    { name = "pipelineChecksumRate", type = "Float" },
+    { name = "pipelineErrorCorrectionOverhead", type = "Float" },
+    { name = "pipelineStability", type = "Float" },
+    { name = "pipelineBusWidth", type = "Float" },
+    { name = "pipelineSwitchingSpeed", type = "Float" },
+    { name = "pipelineShockResistance", type = "Float" },
+    { name = "pipelineActivePower", type = "Float" },
+    { name = "pipelineTransistorCount", type = "Float" },
+    { name = "pipelineJitter", type = "Float" },
+    { name = "pipelineAirflow", type = "Float" },
+    { name = "pipelineHandshakeDelay", type = "Float" },
+    { name = "pipelineCapacitance", type = "Float" },
+    { name = "pipelineThroughputPerLane", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1708
+name = "tensor core_1708"
+fields = [
+    { name = "tensor coreInstructionSetWidth", type = "Float" },
+    { name = "tensor coreCapacitance", type = "Float" },
+    { name = "tensor coreInitializationOverhead", type = "Float" },
+    { name = "tensor coreVoltage", type = "Float" },
+    { name = "tensor coreThermalHeadroom", type = "Float" },
+    { name = "tensor coreDutyCycle", type = "Float" },
+    { name = "tensor coreSignalIntegrity", type = "Float" },
+    { name = "tensor coreRiseTime", type = "Float" },
+    { name = "tensor coreHarmonicDistortion", type = "Float" },
+    { name = "tensor coreResetTime", type = "Float" },
+    { name = "tensor coreIdlePower", type = "Float" },
+    { name = "tensor coreLatency", type = "Float" },
+    { name = "tensor corePhaseShift", type = "Float" },
+    { name = "tensor coreProcessNode", type = "Float" },
+    { name = "tensor coreBurstLength", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1707
+name = "multiprocessor_1707"
+fields = [
+    { name = "multiprocessorStability", type = "Float" },
+    { name = "multiprocessorLatency", type = "Float" },
+    { name = "multiprocessorBandwidth", type = "Float" },
+    { name = "multiprocessorConcurrency", type = "Float" },
+    { name = "multiprocessorDutyCycle", type = "Float" },
+    { name = "multiprocessorTransferRate", type = "Float" },
+    { name = "multiprocessorSleepPower", type = "Float" },
+    { name = "multiprocessorVoltage", type = "Float" },
+    { name = "multiprocessorDieSize", type = "Float" },
+    { name = "multiprocessorJitter", type = "Float" },
+    { name = "multiprocessorInstructionSetWidth", type = "Float" },
+    { name = "multiprocessorWearOut", type = "Float" },
+    { name = "multiprocessorThroughputPerLane", type = "Float" },
+    { name = "multiprocessorFormFactor", type = "Float" },
+    { name = "multiprocessorCacheLineLength", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1709
+name = "ray tracing unit_1709"
+fields = [
+    { name = "ray tracing unitHandshakeDelay", type = "Float" },
+    { name = "ray tracing unitVoltage", type = "Float" },
+    { name = "ray tracing unitScalability", type = "Float" },
+    { name = "ray tracing unitMeanTimeBetweenFailures", type = "Float" },
+    { name = "ray tracing unitBootTime", type = "Float" },
+    { name = "ray tracing unitResistance", type = "Float" },
+    { name = "ray tracing unitSignalToNoiseRatio", type = "Float" },
+    { name = "ray tracing unitRetentionTime", type = "Float" },
+    { name = "ray tracing unitSignalIntegrity", type = "Float" },
+    { name = "ray tracing unitBurstLength", type = "Float" },
+    { name = "ray tracing unitAvailability", type = "Float" },
+    { name = "ray tracing unitDrift", type = "Float" },
+    { name = "ray tracing unitResetTime", type = "Float" },
+    { name = "ray tracing unitFormFactor", type = "Float" },
+    { name = "ray tracing unitActivePower", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1704
+name = "VRAM_1704"
+fields = [
+    { name = "VRAMStability", type = "Float" },
+    { name = "VRAMMeanTimeToRepair", type = "Float" },
+    { name = "VRAMNoiseMargin", type = "Float" },
+    { name = "VRAMEndurance", type = "Float" },
+    { name = "VRAMTransistorCount", type = "Float" },
+    { name = "VRAMPropagationDelay", type = "Float" },
+    { name = "VRAMDutyCycle", type = "Float" },
+    { name = "VRAMAvailability", type = "Float" },
+    { name = "VRAMBufferSize", type = "Float" },
+    { name = "VRAMCurrent", type = "Float" },
+    { name = "VRAMMeanTimeBetweenFailures", type = "Float" },
+    { name = "VRAMErrorRate", type = "Float" },
+    { name = "VRAMFallTime", type = "Float" },
+    { name = "VRAMProcessNode", type = "Float" },
+    { name = "VRAMTransferRate", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1700
+name = "shader_1700"
+fields = [
+    { name = "shaderBandwidth", type = "Float" },
+    { name = "shaderBufferSize", type = "Float" },
+    { name = "shaderParityCoverage", type = "Float" },
+    { name = "shaderBootTime", type = "Float" },
+    { name = "shaderScalability", type = "Float" },
+    { name = "shaderCycleTime", type = "Float" },
+    { name = "shaderReliability", type = "Float" },
+    { name = "shaderFabricationYield", type = "Float" },
+    { name = "shaderCapacitance", type = "Float" },
+    { name = "shaderResetTime", type = "Float" },
+    { name = "shaderHandshakeDelay", type = "Float" },
+    { name = "shaderActivePower", type = "Float" },
+    { name = "shaderPhaseShift", type = "Float" },
+    { name = "shaderWordSize", type = "Float" },
+    { name = "shaderElectromagneticInterference", type = "Float" },
+]
+
+[[publishers.writerGroups]]
+id = 400
+interval = 1000
+name = "I/O & Buses"
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1409
+name = "transceiver_1409"
+fields = [
+    { name = "transceiverRefreshInterval", type = "Float" },
+    { name = "transceiverDutyCycle", type = "Float" },
+    { name = "transceiverBurstLength", type = "Float" },
+    { name = "transceiverQueueDepth", type = "Float" },
+    { name = "transceiverScalability", type = "Float" },
+    { name = "transceiverVibrationTolerance", type = "Float" },
+    { name = "transceiverConcurrency", type = "Float" },
+    { name = "transceiverAccessTime", type = "Float" },
+    { name = "transceiverIdlePower", type = "Float" },
+    { name = "transceiverLatency", type = "Float" },
+    { name = "transceiverNoiseMargin", type = "Float" },
+    { name = "transceiverBandwidth", type = "Float" },
+    { name = "transceiverThroughput", type = "Float" },
+    { name = "transceiverBootTime", type = "Float" },
+    { name = "transceiverInterconnectDensity", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1402
+name = "SATA_1402"
+fields = [
+    { name = "SATACoolingCapacity", type = "Float" },
+    { name = "SATADieSize", type = "Float" },
+    { name = "SATAPowerDraw", type = "Float" },
+    { name = "SATAErrorCorrectionOverhead", type = "Float" },
+    { name = "SATAParallelism", type = "Float" },
+    { name = "SATAFanSpeed", type = "Float" },
+    { name = "SATAWearOut", type = "Float" },
+    { name = "SATAConcurrency", type = "Float" },
+    { name = "SATASustainedRate", type = "Float" },
+    { name = "SATAResetTime", type = "Float" },
+    { name = "SATASignalIntegrity", type = "Float" },
+    { name = "SATADutyCycle", type = "Float" },
+    { name = "SATALatencyPerHop", type = "Float" },
+    { name = "SATATransistorCount", type = "Float" },
+    { name = "SATACycleTime", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1401
+name = "USB_1401"
+fields = [
+    { name = "USBClockSpeed", type = "Float" },
+    { name = "USBRefreshInterval", type = "Float" },
+    { name = "USBTransferRate", type = "Float" },
+    { name = "USBCycleTime", type = "Float" },
+    { name = "USBAvailability", type = "Float" },
+    { name = "USBFanSpeed", type = "Float" },
+    { name = "USBParallelism", type = "Float" },
+    { name = "USBVoltage", type = "Float" },
+    { name = "USBPhaseShift", type = "Float" },
+    { name = "USBBandwidth", type = "Float" },
+    { name = "USBThroughputPerLane", type = "Float" },
+    { name = "USBPowerDraw", type = "Float" },
+    { name = "USBQueueDepth", type = "Float" },
+    { name = "USBSeekTime", type = "Float" },
+    { name = "USBReliability", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1404
+name = "bus_1404"
+fields = [
+    { name = "busPipelineDepth", type = "Float" },
+    { name = "busAccessTime", type = "Float" },
+    { name = "busAvailability", type = "Float" },
+    { name = "busCycleTime", type = "Float" },
+    { name = "busPropagationDelay", type = "Float" },
+    { name = "busBufferSize", type = "Float" },
+    { name = "busFanSpeed", type = "Float" },
+    { name = "busReliability", type = "Float" },
+    { name = "busAging", type = "Float" },
+    { name = "busPeakRate", type = "Float" },
+    { name = "busJitter", type = "Float" },
+    { name = "busLatencyPerHop", type = "Float" },
+    { name = "busErrorCorrectionOverhead", type = "Float" },
+    { name = "busHeatDissipation", type = "Float" },
+    { name = "busFallTime", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1405
+name = "lane_1405"
+fields = [
+    { name = "laneActivePower", type = "Float" },
+    { name = "laneBusWidth", type = "Float" },
+    { name = "laneResetTime", type = "Float" },
+    { name = "laneInductance", type = "Float" },
+    { name = "laneWordSize", type = "Float" },
+    { name = "laneNoiseMargin", type = "Float" },
+    { name = "laneFrequencyResponse", type = "Float" },
+    { name = "laneSleepPower", type = "Float" },
+    { name = "laneProcessNode", type = "Float" },
+    { name = "laneLatencyPerHop", type = "Float" },
+    { name = "laneRefreshInterval", type = "Float" },
+    { name = "laneErrorCorrectionOverhead", type = "Float" },
+    { name = "laneTransistorCount", type = "Float" },
+    { name = "laneHandshakeDelay", type = "Float" },
+    { name = "laneSeekTime", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1407
+name = "interrupt_1407"
+fields = [
+    { name = "interruptPeakRate", type = "Float" },
+    { name = "interruptSustainedRate", type = "Float" },
+    { name = "interruptScalability", type = "Float" },
+    { name = "interruptReliability", type = "Float" },
+    { name = "interruptFanSpeed", type = "Float" },
+    { name = "interruptNoiseMargin", type = "Float" },
+    { name = "interruptLatency", type = "Float" },
+    { name = "interruptSignalIntegrity", type = "Float" },
+    { name = "interruptInterconnectDensity", type = "Float" },
+    { name = "interruptRiseTime", type = "Float" },
+    { name = "interruptBufferSize", type = "Float" },
+    { name = "interruptErrorCorrectionOverhead", type = "Float" },
+    { name = "interruptJitter", type = "Float" },
+    { name = "interruptShockResistance", type = "Float" },
+    { name = "interruptParallelism", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1408
+name = "channel_1408"
+fields = [
+    { name = "channelHandshakeDelay", type = "Float" },
+    { name = "channelDutyCycle", type = "Float" },
+    { name = "channelCrosstalk", type = "Float" },
+    { name = "channelVoltage", type = "Float" },
+    { name = "channelRedundancy", type = "Float" },
+    { name = "channelDataIntegrity", type = "Float" },
+    { name = "channelSleepPower", type = "Float" },
+    { name = "channelMeanTimeBetweenFailures", type = "Float" },
+    { name = "channelLatencyPerHop", type = "Float" },
+    { name = "channelInitializationOverhead", type = "Float" },
+    { name = "channelCycleTime", type = "Float" },
+    { name = "channelFaultTolerance", type = "Float" },
+    { name = "channelTransferRate", type = "Float" },
+    { name = "channelAirflow", type = "Float" },
+    { name = "channelFallTime", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1403
+name = "Thunderbolt_1403"
+fields = [
+    { name = "ThunderboltClockSpeed", type = "Float" },
+    { name = "ThunderboltParityCoverage", type = "Float" },
+    { name = "ThunderboltIOPS", type = "Float" },
+    { name = "ThunderboltInstructionSetWidth", type = "Float" },
+    { name = "ThunderboltInitializationOverhead", type = "Float" },
+    { name = "ThunderboltStability", type = "Float" },
+    { name = "ThunderboltBusWidth", type = "Float" },
+    { name = "ThunderboltFanSpeed", type = "Float" },
+    { name = "ThunderboltWearOut", type = "Float" },
+    { name = "ThunderboltRiseTime", type = "Float" },
+    { name = "ThunderboltSwitchingSpeed", type = "Float" },
+    { name = "ThunderboltResetTime", type = "Float" },
+    { name = "ThunderboltBurstLength", type = "Float" },
+    { name = "ThunderboltReliability", type = "Float" },
+    { name = "ThunderboltJitter", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1400
+name = "PCIe_1400"
+fields = [
+    { name = "PCIeErrorRate", type = "Float" },
+    { name = "PCIeFanSpeed", type = "Float" },
+    { name = "PCIeIdlePower", type = "Float" },
+    { name = "PCIeRegisterCount", type = "Float" },
+    { name = "PCIeTransistorCount", type = "Float" },
+    { name = "PCIePeakRate", type = "Float" },
+    { name = "PCIeChecksumRate", type = "Float" },
+    { name = "PCIePerformancePerWatt", type = "Float" },
+    { name = "PCIeIOPS", type = "Float" },
+    { name = "PCIeBufferSize", type = "Float" },
+    { name = "PCIeInitializationOverhead", type = "Float" },
+    { name = "PCIePropagationDelay", type = "Float" },
+    { name = "PCIeClockSpeed", type = "Float" },
+    { name = "PCIeInterconnectDensity", type = "Float" },
+    { name = "PCIeNegotiationSpeed", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1406
+name = "DMA_1406"
+fields = [
+    { name = "DMAElectromagneticInterference", type = "Float" },
+    { name = "DMAThermalDesignPower", type = "Float" },
+    { name = "DMAHarmonicDistortion", type = "Float" },
+    { name = "DMACacheLineLength", type = "Float" },
+    { name = "DMAVoltage", type = "Float" },
+    { name = "DMAWordSize", type = "Float" },
+    { name = "DMAPipelineDepth", type = "Float" },
+    { name = "DMANegotiationSpeed", type = "Float" },
+    { name = "DMAProcessNode", type = "Float" },
+    { name = "DMAInterconnectDensity", type = "Float" },
+    { name = "DMARegisterCount", type = "Float" },
+    { name = "DMAQueueDepth", type = "Float" },
+    { name = "DMATransistorCount", type = "Float" },
+    { name = "DMAInstructionSetWidth", type = "Float" },
+    { name = "DMANoiseMargin", type = "Float" },
+]
+
+[[publishers.writerGroups]]
+id = 500
+interval = 1000
+name = "Power & Electronics"
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1509
+name = "power supply_1509"
+fields = [
+    { name = "power supplyCacheSize", type = "Float" },
+    { name = "power supplyCurrent", type = "Float" },
+    { name = "power supplyRedundancy", type = "Float" },
+    { name = "power supplyDataIntegrity", type = "Float" },
+    { name = "power supplyParallelism", type = "Float" },
+    { name = "power supplyVoltage", type = "Float" },
+    { name = "power supplyScalability", type = "Float" },
+    { name = "power supplyEndurance", type = "Float" },
+    { name = "power supplySustainedRate", type = "Float" },
+    { name = "power supplySeekTime", type = "Float" },
+    { name = "power supplyInductance", type = "Float" },
+    { name = "power supplyStability", type = "Float" },
+    { name = "power supplyCrosstalk", type = "Float" },
+    { name = "power supplyErrorRate", type = "Float" },
+    { name = "power supplyCacheLineLength", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1506
+name = "voltage regulator_1506"
+fields = [
+    { name = "voltage regulatorSeekTime", type = "Float" },
+    { name = "voltage regulatorErrorCorrectionOverhead", type = "Float" },
+    { name = "voltage regulatorBootTime", type = "Float" },
+    { name = "voltage regulatorConcurrency", type = "Float" },
+    { name = "voltage regulatorRedundancy", type = "Float" },
+    { name = "voltage regulatorDutyCycle", type = "Float" },
+    { name = "voltage regulatorPerformancePerWatt", type = "Float" },
+    { name = "voltage regulatorParityCoverage", type = "Float" },
+    { name = "voltage regulatorIOPS", type = "Float" },
+    { name = "voltage regulatorShockResistance", type = "Float" },
+    { name = "voltage regulatorAirflow", type = "Float" },
+    { name = "voltage regulatorSignalIntegrity", type = "Float" },
+    { name = "voltage regulatorVoltage", type = "Float" },
+    { name = "voltage regulatorChecksumRate", type = "Float" },
+    { name = "voltage regulatorPipelineDepth", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1508
+name = "oscillator_1508"
+fields = [
+    { name = "oscillatorSignalToNoiseRatio", type = "Float" },
+    { name = "oscillatorCapacitance", type = "Float" },
+    { name = "oscillatorErrorCorrectionOverhead", type = "Float" },
+    { name = "oscillatorMeanTimeBetweenFailures", type = "Float" },
+    { name = "oscillatorPhaseShift", type = "Float" },
+    { name = "oscillatorFabricationYield", type = "Float" },
+    { name = "oscillatorHeatDissipation", type = "Float" },
+    { name = "oscillatorJitter", type = "Float" },
+    { name = "oscillatorThroughput", type = "Float" },
+    { name = "oscillatorSustainedRate", type = "Float" },
+    { name = "oscillatorHarmonicDistortion", type = "Float" },
+    { name = "oscillatorRegisterCount", type = "Float" },
+    { name = "oscillatorThermalDesignPower", type = "Float" },
+    { name = "oscillatorBufferSize", type = "Float" },
+    { name = "oscillatorParityCoverage", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1504
+name = "resistor_1504"
+fields = [
+    { name = "resistorAvailability", type = "Float" },
+    { name = "resistorParityCoverage", type = "Float" },
+    { name = "resistorBurstLength", type = "Float" },
+    { name = "resistorCapacitance", type = "Float" },
+    { name = "resistorHandshakeDelay", type = "Float" },
+    { name = "resistorResetTime", type = "Float" },
+    { name = "resistorSleepPower", type = "Float" },
+    { name = "resistorPeakRate", type = "Float" },
+    { name = "resistorClockSpeed", type = "Float" },
+    { name = "resistorThroughputPerLane", type = "Float" },
+    { name = "resistorFabricationYield", type = "Float" },
+    { name = "resistorFallTime", type = "Float" },
+    { name = "resistorRegisterCount", type = "Float" },
+    { name = "resistorVibrationTolerance", type = "Float" },
+    { name = "resistorCacheSize", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1500
+name = "transistor_1500"
+fields = [
+    { name = "transistorFormFactor", type = "Float" },
+    { name = "transistorPropagationDelay", type = "Float" },
+    { name = "transistorEndurance", type = "Float" },
+    { name = "transistorThermalHeadroom", type = "Float" },
+    { name = "transistorScalability", type = "Float" },
+    { name = "transistorCrosstalk", type = "Float" },
+    { name = "transistorAvailability", type = "Float" },
+    { name = "transistorDrift", type = "Float" },
+    { name = "transistorPowerDraw", type = "Float" },
+    { name = "transistorThroughputPerLane", type = "Float" },
+    { name = "transistorMeanTimeToRepair", type = "Float" },
+    { name = "transistorParallelism", type = "Float" },
+    { name = "transistorImpedance", type = "Float" },
+    { name = "transistorCoolingCapacity", type = "Float" },
+    { name = "transistorShockResistance", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1507
+name = "clock_1507"
+fields = [
+    { name = "clockVibrationTolerance", type = "Float" },
+    { name = "clockMeanTimeBetweenFailures", type = "Float" },
+    { name = "clockWearOut", type = "Float" },
+    { name = "clockJitter", type = "Float" },
+    { name = "clockCycleTime", type = "Float" },
+    { name = "clockPhaseShift", type = "Float" },
+    { name = "clockDrift", type = "Float" },
+    { name = "clockErrorCorrectionOverhead", type = "Float" },
+    { name = "clockElectromagneticInterference", type = "Float" },
+    { name = "clockThermalHeadroom", type = "Float" },
+    { name = "clockHarmonicDistortion", type = "Float" },
+    { name = "clockCapacitance", type = "Float" },
+    { name = "clockConcurrency", type = "Float" },
+    { name = "clockErrorRate", type = "Float" },
+    { name = "clockTransistorCount", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1501
+name = "diode_1501"
+fields = [
+    { name = "diodeStability", type = "Float" },
+    { name = "diodeRiseTime", type = "Float" },
+    { name = "diodeProcessNode", type = "Float" },
+    { name = "diodeVibrationTolerance", type = "Float" },
+    { name = "diodeRedundancy", type = "Float" },
+    { name = "diodeAging", type = "Float" },
+    { name = "diodeThermalDesignPower", type = "Float" },
+    { name = "diodeImpedance", type = "Float" },
+    { name = "diodePowerDraw", type = "Float" },
+    { name = "diodeCurrent", type = "Float" },
+    { name = "diodeInductance", type = "Float" },
+    { name = "diodeMeanTimeBetweenFailures", type = "Float" },
+    { name = "diodeCacheSize", type = "Float" },
+    { name = "diodeErrorRate", type = "Float" },
+    { name = "diodeUptime", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1502
+name = "capacitor_1502"
+fields = [
+    { name = "capacitorInductance", type = "Float" },
+    { name = "capacitorRiseTime", type = "Float" },
+    { name = "capacitorWearOut", type = "Float" },
+    { name = "capacitorThermalHeadroom", type = "Float" },
+    { name = "capacitorWordSize", type = "Float" },
+    { name = "capacitorAirflow", type = "Float" },
+    { name = "capacitorErrorRate", type = "Float" },
+    { name = "capacitorJitter", type = "Float" },
+    { name = "capacitorThroughputPerLane", type = "Float" },
+    { name = "capacitorErrorCorrectionOverhead", type = "Float" },
+    { name = "capacitorCapacitance", type = "Float" },
+    { name = "capacitorCoolingCapacity", type = "Float" },
+    { name = "capacitorImpedance", type = "Float" },
+    { name = "capacitorSwitchingSpeed", type = "Float" },
+    { name = "capacitorPeakRate", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1503
+name = "inductor_1503"
+fields = [
+    { name = "inductorWearOut", type = "Float" },
+    { name = "inductorScalability", type = "Float" },
+    { name = "inductorRiseTime", type = "Float" },
+    { name = "inductorPowerDraw", type = "Float" },
+    { name = "inductorIdlePower", type = "Float" },
+    { name = "inductorChecksumRate", type = "Float" },
+    { name = "inductorReliability", type = "Float" },
+    { name = "inductorDutyCycle", type = "Float" },
+    { name = "inductorCycleTime", type = "Float" },
+    { name = "inductorParityCoverage", type = "Float" },
+    { name = "inductorCacheLineLength", type = "Float" },
+    { name = "inductorDataIntegrity", type = "Float" },
+    { name = "inductorInstructionSetWidth", type = "Float" },
+    { name = "inductorRedundancy", type = "Float" },
+    { name = "inductorThermalHeadroom", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1505
+name = "MOSFET_1505"
+fields = [
+    { name = "MOSFETIdlePower", type = "Float" },
+    { name = "MOSFETFormFactor", type = "Float" },
+    { name = "MOSFETBootTime", type = "Float" },
+    { name = "MOSFETDrift", type = "Float" },
+    { name = "MOSFETPhaseShift", type = "Float" },
+    { name = "MOSFETRedundancy", type = "Float" },
+    { name = "MOSFETDieSize", type = "Float" },
+    { name = "MOSFETHarmonicDistortion", type = "Float" },
+    { name = "MOSFETTransistorCount", type = "Float" },
+    { name = "MOSFETAvailability", type = "Float" },
+    { name = "MOSFETBandwidth", type = "Float" },
+    { name = "MOSFETProcessNode", type = "Float" },
+    { name = "MOSFETCycleTime", type = "Float" },
+    { name = "MOSFETCacheLineLength", type = "Float" },
+    { name = "MOSFETQueueDepth", type = "Float" },
+]
+
+[[publishers.writerGroups]]
+id = 600
+interval = 1000
+name = "Networking Hardware"
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1605
+name = "antenna_1605"
+fields = [
+    { name = "antennaUptime", type = "Float" },
+    { name = "antennaAirflow", type = "Float" },
+    { name = "antennaPhaseShift", type = "Float" },
+    { name = "antennaVoltage", type = "Float" },
+    { name = "antennaStability", type = "Float" },
+    { name = "antennaEndurance", type = "Float" },
+    { name = "antennaBurstLength", type = "Float" },
+    { name = "antennaSleepPower", type = "Float" },
+    { name = "antennaBufferSize", type = "Float" },
+    { name = "antennaCycleTime", type = "Float" },
+    { name = "antennaDrift", type = "Float" },
+    { name = "antennaRedundancy", type = "Float" },
+    { name = "antennaFaultTolerance", type = "Float" },
+    { name = "antennaPowerDraw", type = "Float" },
+    { name = "antennaResetTime", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1602
+name = "NIC_1602"
+fields = [
+    { name = "NICStability", type = "Float" },
+    { name = "NICHeatDissipation", type = "Float" },
+    { name = "NICFormFactor", type = "Float" },
+    { name = "NICPipelineDepth", type = "Float" },
+    { name = "NICAccessTime", type = "Float" },
+    { name = "NICRefreshInterval", type = "Float" },
+    { name = "NICParityCoverage", type = "Float" },
+    { name = "NICUptime", type = "Float" },
+    { name = "NICFallTime", type = "Float" },
+    { name = "NICDataIntegrity", type = "Float" },
+    { name = "NICParallelism", type = "Float" },
+    { name = "NICThroughput", type = "Float" },
+    { name = "NICCrosstalk", type = "Float" },
+    { name = "NICSustainedRate", type = "Float" },
+    { name = "NICWearOut", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1606
+name = "port_1606"
+fields = [
+    { name = "portThroughputPerLane", type = "Float" },
+    { name = "portCycleTime", type = "Float" },
+    { name = "portConcurrency", type = "Float" },
+    { name = "portDieSize", type = "Float" },
+    { name = "portPipelineDepth", type = "Float" },
+    { name = "portResetTime", type = "Float" },
+    { name = "portAccessTime", type = "Float" },
+    { name = "portMeanTimeBetweenFailures", type = "Float" },
+    { name = "portCacheLineLength", type = "Float" },
+    { name = "portPerformancePerWatt", type = "Float" },
+    { name = "portReliability", type = "Float" },
+    { name = "portUptime", type = "Float" },
+    { name = "portMeanTimeToRepair", type = "Float" },
+    { name = "portVoltage", type = "Float" },
+    { name = "portPropagationDelay", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1608
+name = "SFP_1608"
+fields = [
+    { name = "SFPCacheSize", type = "Float" },
+    { name = "SFPAvailability", type = "Float" },
+    { name = "SFPSustainedRate", type = "Float" },
+    { name = "SFPMeanTimeBetweenFailures", type = "Float" },
+    { name = "SFPDrift", type = "Float" },
+    { name = "SFPRiseTime", type = "Float" },
+    { name = "SFPFanSpeed", type = "Float" },
+    { name = "SFPRegisterCount", type = "Float" },
+    { name = "SFPActivePower", type = "Float" },
+    { name = "SFPAirflow", type = "Float" },
+    { name = "SFPFrequencyResponse", type = "Float" },
+    { name = "SFPThermalDesignPower", type = "Float" },
+    { name = "SFPNegotiationSpeed", type = "Float" },
+    { name = "SFPSeekTime", type = "Float" },
+    { name = "SFPPhaseShift", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1609
+name = "backplane_1609"
+fields = [
+    { name = "backplaneThermalDesignPower", type = "Float" },
+    { name = "backplaneHarmonicDistortion", type = "Float" },
+    { name = "backplaneCoolingCapacity", type = "Float" },
+    { name = "backplaneHandshakeDelay", type = "Float" },
+    { name = "backplaneTransferRate", type = "Float" },
+    { name = "backplaneScalability", type = "Float" },
+    { name = "backplaneSignalIntegrity", type = "Float" },
+    { name = "backplaneFrequencyResponse", type = "Float" },
+    { name = "backplaneFanSpeed", type = "Float" },
+    { name = "backplaneTransistorCount", type = "Float" },
+    { name = "backplaneLatency", type = "Float" },
+    { name = "backplaneEfficiency", type = "Float" },
+    { name = "backplaneCycleTime", type = "Float" },
+    { name = "backplaneThermalHeadroom", type = "Float" },
+    { name = "backplaneJitter", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1600
+name = "router_1600"
+fields = [
+    { name = "routerFormFactor", type = "Float" },
+    { name = "routerThermalDesignPower", type = "Float" },
+    { name = "routerEndurance", type = "Float" },
+    { name = "routerBandwidth", type = "Float" },
+    { name = "routerFabricationYield", type = "Float" },
+    { name = "routerSeekTime", type = "Float" },
+    { name = "routerCrosstalk", type = "Float" },
+    { name = "routerVibrationTolerance", type = "Float" },
+    { name = "routerMeanTimeBetweenFailures", type = "Float" },
+    { name = "routerDrift", type = "Float" },
+    { name = "routerSleepPower", type = "Float" },
+    { name = "routerAccessTime", type = "Float" },
+    { name = "routerSignalToNoiseRatio", type = "Float" },
+    { name = "routerIdlePower", type = "Float" },
+    { name = "routerWearOut", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1607
+name = "cable_1607"
+fields = [
+    { name = "cableParityCoverage", type = "Float" },
+    { name = "cableFormFactor", type = "Float" },
+    { name = "cableAging", type = "Float" },
+    { name = "cableDieSize", type = "Float" },
+    { name = "cablePerformancePerWatt", type = "Float" },
+    { name = "cablePowerDraw", type = "Float" },
+    { name = "cableBufferSize", type = "Float" },
+    { name = "cableSignalToNoiseRatio", type = "Float" },
+    { name = "cableResistance", type = "Float" },
+    { name = "cableReliability", type = "Float" },
+    { name = "cableVibrationTolerance", type = "Float" },
+    { name = "cableMeanTimeToRepair", type = "Float" },
+    { name = "cableErrorRate", type = "Float" },
+    { name = "cableFanSpeed", type = "Float" },
+    { name = "cableCapacitance", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1604
+name = "MAC_1604"
+fields = [
+    { name = "MACRegisterCount", type = "Float" },
+    { name = "MACLatencyPerHop", type = "Float" },
+    { name = "MACPeakRate", type = "Float" },
+    { name = "MACSignalToNoiseRatio", type = "Float" },
+    { name = "MACNegotiationSpeed", type = "Float" },
+    { name = "MACAvailability", type = "Float" },
+    { name = "MACResetTime", type = "Float" },
+    { name = "MACSignalIntegrity", type = "Float" },
+    { name = "MACElectromagneticInterference", type = "Float" },
+    { name = "MACUtilization", type = "Float" },
+    { name = "MACJitter", type = "Float" },
+    { name = "MACTransistorCount", type = "Float" },
+    { name = "MACBurstLength", type = "Float" },
+    { name = "MACPerformancePerWatt", type = "Float" },
+    { name = "MACEndurance", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1603
+name = "PHY_1603"
+fields = [
+    { name = "PHYVibrationTolerance", type = "Float" },
+    { name = "PHYNoiseMargin", type = "Float" },
+    { name = "PHYImpedance", type = "Float" },
+    { name = "PHYActivePower", type = "Float" },
+    { name = "PHYRefreshInterval", type = "Float" },
+    { name = "PHYCapacitance", type = "Float" },
+    { name = "PHYRegisterCount", type = "Float" },
+    { name = "PHYErrorCorrectionOverhead", type = "Float" },
+    { name = "PHYEfficiency", type = "Float" },
+    { name = "PHYHarmonicDistortion", type = "Float" },
+    { name = "PHYFabricationYield", type = "Float" },
+    { name = "PHYIdlePower", type = "Float" },
+    { name = "PHYBandwidth", type = "Float" },
+    { name = "PHYPropagationDelay", type = "Float" },
+    { name = "PHYPhaseShift", type = "Float" },
+]
+
+[[publishers.writerGroups.dataSets]]
+writerId = 1601
+name = "switch_1601"
+fields = [
+    { name = "switchInitializationOverhead", type = "Float" },
+    { name = "switchIdlePower", type = "Float" },
+    { name = "switchRedundancy", type = "Float" },
+    { name = "switchSwitchingSpeed", type = "Float" },
+    { name = "switchDieSize", type = "Float" },
+    { name = "switchParityCoverage", type = "Float" },
+    { name = "switchFormFactor", type = "Float" },
+    { name = "switchDutyCycle", type = "Float" },
+    { name = "switchSignalToNoiseRatio", type = "Float" },
+    { name = "switchQueueDepth", type = "Float" },
+    { name = "switchWearOut", type = "Float" },
+    { name = "switchErrorRate", type = "Float" },
+    { name = "switchWordSize", type = "Float" },
+    { name = "switchBufferSize", type = "Float" },
+    { name = "switchBurstLength", type = "Float" },
+]

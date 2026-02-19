@@ -1,0 +1,33 @@
+[topology]
+pub_count = 2
+sub_count = 1
+protocol = "UADP"
+interval = 500
+group_count = 5
+dataset_count = 10
+field_count = 15
+debug = false
+[ports]
+pub_base_port = 5840
+sub_base_port = 4840
+
+[infra]
+image_name = "opcua_server:latest"
+config_docker_dir = "/app/configs"
+config_host_dir = "$HOME/code/configs"
+config_name = "config.toml"
+repo_dir = "$HOME/code"
+env_file = ".env"
+repo_url = "git@github.com:AxsolLars/BachelorCode.git"
+branch = "main"
+host_physical_function = "enp1s0f1np1"
+switch_physical_function = "enp1s0f1np1"
+[ssh]
+key_path = "/home/Lars/.ssh/id_ed25519"
+timeout = 5
+host_username = "host"
+host_ip = "172.16.34.10"
+host_port = 22001
+switch_username = "vswitch"
+switch_ip = "172.16.34.10"
+switch_port = 22002
