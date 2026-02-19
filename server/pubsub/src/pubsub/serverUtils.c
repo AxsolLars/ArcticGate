@@ -168,13 +168,11 @@ Util_initializeReaderConfig(UA_DataSetReaderConfig * readerConfig, ServerContext
                          &UA_TYPES[UA_TYPES_UINT32]);
         
     readerConfig->writerGroupId    = ctx->identifiers.groupId;
-    readerConfig->dataSetWriterId  = ctx->identifiers.writerId;
+    readerConfig->dataSetWriterId  = 0;
     UA_UadpDataSetReaderMessageDataType *msgSettings = UA_UadpDataSetReaderMessageDataType_new();
     msgSettings->networkMessageContentMask = UA_UADPNETWORKMESSAGECONTENTMASK_PUBLISHERID |
     UA_UADPNETWORKMESSAGECONTENTMASK_GROUPHEADER |
-    UA_UADPNETWORKMESSAGECONTENTMASK_WRITERGROUPID |
-    UA_UADPNETWORKMESSAGECONTENTMASK_PAYLOADHEADER |
-    UA_UADPNETWORKMESSAGECONTENTMASK_DATASETCLASSID;
+    UA_UADPNETWORKMESSAGECONTENTMASK_WRITERGROUPID;
     readerConfig->messageSettings.encoding             = UA_EXTENSIONOBJECT_DECODED;
     readerConfig->messageSettings.content.decoded.type = &UA_TYPES[UA_TYPES_UADPDATASETREADERMESSAGEDATATYPE];
     readerConfig->messageSettings.content.decoded.data = msgSettings;
