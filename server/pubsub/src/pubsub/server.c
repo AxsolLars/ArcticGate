@@ -298,7 +298,7 @@ int runServer(
             return retval;
         }
         // Add connection for Publishing
-        retval |= Util_addPubConnection(server, publishTransportProfile, publishNetworkAddressUrl, ids);
+        retval |= Util_addUdpPubConnection(server, publishTransportProfile, publishNetworkAddressUrl, ids);
         if(retval != UA_STATUSCODE_GOOD) {
             UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
                         "addPubConnection failed: 0x%08x", retval);

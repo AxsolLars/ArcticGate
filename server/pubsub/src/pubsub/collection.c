@@ -5,7 +5,12 @@
 #include <open62541/server.h>
 
 typedef struct {
-    short encodingProtocol; // UA_PUBSUB_ENCODING_JSON, UA_PUBSUB_ENCODING_UADP, UA_PUBSUB_ENCODING_BINARY
+    char * mqttClientId;
+    char * topic;
+    bool useJson;
+    bool useMqtt; 
+    int metaUpdateTime;
+    char * metaQueueName;
 } ServerConfig;
 typedef struct {
     UA_NodeId subConId;
@@ -23,7 +28,7 @@ typedef struct {
 
 /* Renamed from IntCollection to PubSubIdentifiers */
 typedef struct {
-    uint32_t publisherId;
+    uint16_t publisherId;
     uint16_t groupId;
     uint16_t writerId;
     uint16_t nsIndex;

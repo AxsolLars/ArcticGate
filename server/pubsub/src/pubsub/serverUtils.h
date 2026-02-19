@@ -16,7 +16,7 @@ Util_addSubConnection(UA_Server *server, UA_String *transportProfile,
                       UA_NetworkAddressUrlDataType *networkAddressUrl, ServerContext * ctx);
 
 UA_StatusCode
-Util_addPubConnection(UA_Server *server, UA_String *transportProfile,
+Util_addUdpPubConnection(UA_Server *server, UA_String *transportProfile,
                       UA_NetworkAddressUrlDataType *networkAddressUrl, ServerContext * ctx);
 
 /* --- Publisher & Address Space Hierarchy --- */

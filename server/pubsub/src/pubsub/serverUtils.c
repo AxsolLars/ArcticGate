@@ -165,16 +165,14 @@ Util_initializeReaderConfig(UA_DataSetReaderConfig * readerConfig, ServerContext
 
     UA_Variant_setScalarCopy(&readerConfig->publisherId,
                          &ctx->identifiers.publisherId,
-                         &UA_TYPES[UA_TYPES_UINT32]);
+                         &UA_TYPES[UA_TYPES_UINT16]);
         
     readerConfig->writerGroupId    = ctx->identifiers.groupId;
-    readerConfig->dataSetWriterId  = ctx->identifiers.writerId;
+    readerConfig->dataSetWriterId  = 0;
     UA_UadpDataSetReaderMessageDataType *msgSettings = UA_UadpDataSetReaderMessageDataType_new();
     msgSettings->networkMessageContentMask = UA_UADPNETWORKMESSAGECONTENTMASK_PUBLISHERID |
     UA_UADPNETWORKMESSAGECONTENTMASK_GROUPHEADER |
-    UA_UADPNETWORKMESSAGECONTENTMASK_WRITERGROUPID |
-    UA_UADPNETWORKMESSAGECONTENTMASK_PAYLOADHEADER |
-    UA_UADPNETWORKMESSAGECONTENTMASK_DATASETCLASSID;
+    UA_UADPNETWORKMESSAGECONTENTMASK_WRITERGROUPID;
     readerConfig->messageSettings.encoding             = UA_EXTENSIONOBJECT_DECODED;
     readerConfig->messageSettings.content.decoded.type = &UA_TYPES[UA_TYPES_UADPDATASETREADERMESSAGEDATATYPE];
     readerConfig->messageSettings.content.decoded.data = msgSettings;
@@ -216,10 +214,46 @@ Util_addDataSetReader(UA_Server *server, ServerContext * ctx, UA_DataSetReaderCo
     
     return retval;
 }
+void 
+addDatasetWriterTransportSettings(UA_DataSetWriterConfig * dataSetWriterConfig, ServerContext * ctx){
+    UA_BrokerDataSetWriterTransportDataType brokerTransportSettings;
+    memset(&brokerTransportSettings, 0, sizeof(UA_BrokerDataSetWriterTransportDataType));
 
-UA_StatusCode
-initializeBrokerTransportSettings(){
+    /* Assign the Topic at which MQTT publish should happen */
+    brokerTransportSettings.queueName = UA_STRING(ctx->config.topic);
+    brokerTransportSettings.resourceUri = UA_STRING_NULL;
+    brokerTransportSettings.authenticationProfileUri = UA_STRING_NULL;
+    brokerTransportSettings.metaDataQueueName = UA_STRING(ctx->config.metaQueueName);
+    brokerTransportSettings.metaDataUpdateTime = ctx->config.metaUpdateTime;
 
+    /* Choose the QOS Level for MQTT */
+    brokerTransportSettings.requestedDeliveryGuarantee = UA_BROKERTRANSPORTQUALITYOFSERVICE_BESTEFFORT;
+
+    /* Encapsulate config in transportSettings */
+    UA_ExtensionObject transportSettings;
+    memset(&transportSettings, 0, sizeof(UA_ExtensionObject));
+    transportSettings.encoding = UA_EXTENSIONOBJECT_DECODED;
+    transportSettings.content.decoded.type = &UA_TYPES[UA_TYPES_BROKERDATASETWRITERTRANSPORTDATATYPE];
+    transportSettings.content.decoded.data = &brokerTransportSettings;
+
+    dataSetWriterConfig->transportSettings = transportSettings;
+}
+void
+addDatasetWriterJSONEncoding(UA_DataSetWriterConfig * dataSetWriterConfig){
+    UA_JsonDataSetWriterMessageDataType jsonDswMd;
+    UA_ExtensionObject messageSettings;
+    jsonDswMd.dataSetMessageContentMask = (UA_JsonDataSetMessageContentMask)
+        (UA_JSONDATASETMESSAGECONTENTMASK_DATASETWRITERID |
+            UA_JSONDATASETMESSAGECONTENTMASK_SEQUENCENUMBER |
+            UA_JSONDATASETMESSAGECONTENTMASK_STATUS |
+            UA_JSONDATASETMESSAGECONTENTMASK_METADATAVERSION |
+            UA_JSONDATASETMESSAGECONTENTMASK_TIMESTAMP);
+
+    messageSettings.encoding = UA_EXTENSIONOBJECT_DECODED;
+    messageSettings.content.decoded.type = &UA_TYPES[UA_TYPES_JSONDATASETWRITERMESSAGEDATATYPE];
+    messageSettings.content.decoded.data = &jsonDswMd;
+
+    dataSetWriterConfig->messageSettings = messageSettings;
 }
 UA_StatusCode
 Util_addDataSetWriter(UA_Server * server, ServerContext * ctx, char* name){
@@ -228,7 +262,12 @@ Util_addDataSetWriter(UA_Server * server, ServerContext * ctx, char* name){
     memset(&dswConf, 0, sizeof(dswConf));
     dswConf.name = UA_STRING(name);
     dswConf.dataSetWriterId = ctx->identifiers.writerId;
-
+    if(ctx->config.useJson){
+        addDatasetWriterJSONEncoding(&dswConf);
+    }
+    if(ctx->config.useMqtt){
+        addDatasetWriterTransportSettings(&dswConf, ctx);
+    }
     UA_NodeId dswId;
     retval |= UA_Server_addDataSetWriter(server,ctx->nodes.writerGroupId, ctx->nodes.publishedDataSetId, &dswConf, &dswId);
     if (retval != UA_STATUSCODE_GOOD) {
@@ -291,28 +330,70 @@ Util_addReaderGroup(UA_Server *server, ServerContext * ctx) {
     return retval;
 }
 
-void
-initializeWriterGroupMessage(UA_WriterGroupConfig * writerGroupConfig, UA_UadpWriterGroupMessageDataType *writerGroupMessage){
-    writerGroupMessage->networkMessageContentMask = UA_UADPNETWORKMESSAGECONTENTMASK_PUBLISHERID |
-    UA_UADPNETWORKMESSAGECONTENTMASK_GROUPHEADER |
-    UA_UADPNETWORKMESSAGECONTENTMASK_WRITERGROUPID |
-    UA_UADPNETWORKMESSAGECONTENTMASK_PAYLOADHEADER |
-    UA_UADPNETWORKMESSAGECONTENTMASK_DATASETCLASSID;
-    writerGroupConfig->messageSettings.content.decoded.data = writerGroupMessage;
-}
+
 void
 initializeWriterGroupConfig(UA_WriterGroupConfig* writerGroupConfig, ServerContext * ctx, int interval, char * groupName){
     memset(writerGroupConfig, 0, sizeof(UA_WriterGroupConfig));
-
-    writerGroupConfig->name = UA_String_fromChars(groupName);
+    writerGroupConfig->name = UA_STRING(groupName);
     writerGroupConfig->publishingInterval = interval;
-    writerGroupConfig->enabled = UA_TRUE;
-    writerGroupConfig->writerGroupId = ctx->identifiers.groupId;
+    writerGroupConfig->enabled = UA_FALSE;
+    writerGroupConfig->writerGroupId = 100;
+}
+void
+addWriterGroupMessageUADP(UA_WriterGroupConfig * writerGroupConfig){
     writerGroupConfig->encodingMimeType = UA_PUBSUB_ENCODING_UADP;
     writerGroupConfig->messageSettings.encoding             = UA_EXTENSIONOBJECT_DECODED;
     writerGroupConfig->messageSettings.content.decoded.type = &UA_TYPES[UA_TYPES_UADPWRITERGROUPMESSAGEDATATYPE];
+    UA_UadpWriterGroupMessageDataType *writerGroupMessage;
+    writerGroupMessage  = UA_UadpWriterGroupMessageDataType_new();
+    writerGroupMessage->networkMessageContentMask =
+        (UA_UadpNetworkMessageContentMask)(UA_UADPNETWORKMESSAGECONTENTMASK_PUBLISHERID |
+        (UA_UadpNetworkMessageContentMask)UA_UADPNETWORKMESSAGECONTENTMASK_GROUPHEADER |
+        (UA_UadpNetworkMessageContentMask)UA_UADPNETWORKMESSAGECONTENTMASK_WRITERGROUPID |
+        (UA_UadpNetworkMessageContentMask)UA_UADPNETWORKMESSAGECONTENTMASK_PAYLOADHEADER);
+    writerGroupConfig->messageSettings.content.decoded.data = writerGroupMessage;
 }
 
+void 
+addWriterGroupMessageJson(UA_WriterGroupConfig* writerGroupConfig){
+    UA_JsonWriterGroupMessageDataType *Json_writerGroupMessage;
+    writerGroupConfig->encodingMimeType = UA_PUBSUB_ENCODING_JSON;
+    writerGroupConfig->messageSettings.encoding             = UA_EXTENSIONOBJECT_DECODED;
+
+    writerGroupConfig->messageSettings.content.decoded.type = &UA_TYPES[UA_TYPES_JSONWRITERGROUPMESSAGEDATATYPE];
+    /* The configuration flags for the messages are encapsulated inside the
+        * message- and transport settings extension objects. These extension
+        * objects are defined by the standard. e.g.
+        * UadpWriterGroupMessageDataType */
+    Json_writerGroupMessage = UA_JsonWriterGroupMessageDataType_new();
+    /* Change message settings of writerGroup to send PublisherId,
+        * DataSetMessageHeader, SingleDataSetMessage and DataSetClassId in PayloadHeader
+        * of NetworkMessage */
+    Json_writerGroupMessage->networkMessageContentMask =
+        (UA_JsonNetworkMessageContentMask)(UA_JSONNETWORKMESSAGECONTENTMASK_NETWORKMESSAGEHEADER |
+        (UA_JsonNetworkMessageContentMask)UA_JSONNETWORKMESSAGECONTENTMASK_DATASETMESSAGEHEADER |
+        (UA_JsonNetworkMessageContentMask)UA_JSONNETWORKMESSAGECONTENTMASK_SINGLEDATASETMESSAGE |
+        (UA_JsonNetworkMessageContentMask)UA_JSONNETWORKMESSAGECONTENTMASK_PUBLISHERID |
+        (UA_JsonNetworkMessageContentMask)UA_JSONNETWORKMESSAGECONTENTMASK_DATASETCLASSID);
+    writerGroupConfig->messageSettings.content.decoded.data = Json_writerGroupMessage;
+}
+void 
+addTransportSettings(UA_WriterGroupConfig* writerGroupConfig, ServerContext * ctx){
+    UA_BrokerWriterGroupTransportDataType * brokerTransportSettings = UA_BrokerWriterGroupTransportDataType_new();
+    brokerTransportSettings->queueName = UA_STRING(ctx->config.topic);
+    brokerTransportSettings->resourceUri = UA_STRING_NULL;
+    brokerTransportSettings->authenticationProfileUri = UA_STRING_NULL;
+
+    brokerTransportSettings->requestedDeliveryGuarantee = UA_BROKERTRANSPORTQUALITYOFSERVICE_BESTEFFORT;
+
+    UA_ExtensionObject transportSettings;
+    memset(&transportSettings, 0, sizeof(UA_ExtensionObject));
+    transportSettings.encoding = UA_EXTENSIONOBJECT_DECODED;
+    transportSettings.content.decoded.type = &UA_TYPES[UA_TYPES_BROKERWRITERGROUPTRANSPORTDATATYPE];
+    transportSettings.content.decoded.data = &brokerTransportSettings;
+
+    writerGroupConfig->transportSettings = transportSettings;
+}
 UA_StatusCode
 Util_addWriterGroup(UA_Server *server, ServerContext * ctx, int interval, char * groupName) {
     UA_StatusCode retval = UA_STATUSCODE_GOOD;
@@ -322,11 +403,20 @@ Util_addWriterGroup(UA_Server *server, ServerContext * ctx, int interval, char *
     initializeWriterGroupConfig(&writerGroupConfig, ctx, interval, groupName);
 
 
-    UA_UadpWriterGroupMessageDataType *writerGroupMessage  = UA_UadpWriterGroupMessageDataType_new();
-    initializeWriterGroupMessage(&writerGroupConfig, writerGroupMessage);
 
+    if (ctx->config.useJson){
+        addWriterGroupMessageJson(&writerGroupConfig);
+    } else {
+        addWriterGroupMessageUADP(&writerGroupConfig);
+    }
+
+    if (ctx->config.useMqtt){
+        addTransportSettings(&writerGroupConfig, ctx);
+    }
 
     retval = UA_Server_addWriterGroup(server, ctx->nodes.pubConId, &writerGroupConfig, &ctx->nodes.writerGroupId);
+
+    UA_WriterGroupConfig_clear(&writerGroupConfig);
 
     if (retval != UA_STATUSCODE_GOOD){
         UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
@@ -334,14 +424,14 @@ Util_addWriterGroup(UA_Server *server, ServerContext * ctx, int interval, char *
                  retval, UA_StatusCode_name(retval));
         return retval;
     } else {
-    UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                "WriterGroup added successfully "
-                "(PubId=%u, GroupId=%u, NodeId ns=%u;i=%u)",
-                ctx->identifiers.publisherId,
-                ctx->identifiers.groupId,
-                ctx->nodes.writerGroupId.namespaceIndex,
-                ctx->nodes.writerGroupId.identifier.numeric);
-}
+        UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                    "WriterGroup added successfully "
+                    "(PubId=%u, GroupId=%u, NodeId ns=%u;i=%u)",
+                    ctx->identifiers.publisherId,
+                    ctx->identifiers.groupId,
+                    ctx->nodes.writerGroupId.namespaceIndex,
+                    ctx->nodes.writerGroupId.identifier.numeric);
+    }
 
 
     retval = UA_Server_setWriterGroupOperational(server, ctx->nodes.writerGroupId);
@@ -356,8 +446,6 @@ Util_addWriterGroup(UA_Server *server, ServerContext * ctx, int interval, char *
         return retval;
     }
 
-
-    UA_UadpWriterGroupMessageDataType_delete(writerGroupMessage);
     return retval;
 }
 
@@ -433,7 +521,7 @@ Util_addSubConnection(UA_Server *server, UA_String *transportProfile,
 }
 
 UA_StatusCode
-Util_addPubConnection(UA_Server *server, UA_String *transportProfile,
+Util_addUdpPubConnection(UA_Server *server, UA_String *transportProfile,
                     UA_NetworkAddressUrlDataType *networkAddressUrl, ServerContext * ctx)  {
     if((server == NULL) || (transportProfile == NULL) ||
         (networkAddressUrl == NULL)) {
@@ -458,4 +546,52 @@ Util_addPubConnection(UA_Server *server, UA_String *transportProfile,
     printf("publisherId %u\n", connectionConfig.publisherId.uint32);
     return UA_Server_addPubSubConnection (server, &connectionConfig, &ctx->nodes.pubConId);
 
+}
+
+UA_StatusCode
+Util_addMqttPubConnection(UA_Server *server, UA_NetworkAddressUrlDataType *networkAddressUrl, ServerContext * ctx){
+    UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "Creating MQTT PubSub connection...");
+
+    UA_PubSubConnectionConfig connectionConfig;
+    memset(&connectionConfig, 0, sizeof(connectionConfig));
+    connectionConfig.name = UA_STRING("MQTTpublisher");
+    
+    /* Determine Transport Profile */
+    if(ctx->config.useJson) {
+        UA_LOG_DEBUG(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "Using JSON transport profile.");
+        connectionConfig.transportProfileUri = UA_STRING("http://opcfoundation.org/UA-Profile/Transport/pubsub-mqtt-json");
+    } else {
+        UA_LOG_DEBUG(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "Using UADP transport profile.");
+        connectionConfig.transportProfileUri = UA_STRING("http://opcfoundation.org/UA-Profile/Transport/pubsub-mqtt-uadp");
+    }
+    
+    connectionConfig.enabled = true;
+    UA_Variant_setScalar(&connectionConfig.address, networkAddressUrl,
+                         &UA_TYPES[UA_TYPES_NETWORKADDRESSURLDATATYPE]);
+
+    /* Configure MQTT Client ID */
+    UA_KeyValuePair connectionOptions[1];
+    UA_String mqttClientId = UA_STRING(ctx->config.mqttClientId);
+    
+    UA_LOG_DEBUG(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "MQTT Client ID: %.*s", 
+                 (int)mqttClientId.length, mqttClientId.data);
+
+    connectionOptions[0].key = UA_QUALIFIEDNAME(0, "mqttClientId"); // Common key name for MQTT
+    UA_Variant_setScalar(&connectionOptions[0].value, &mqttClientId, &UA_TYPES[UA_TYPES_STRING]);
+
+    connectionConfig.connectionProperties.map = connectionOptions;
+    connectionConfig.connectionProperties.mapSize = 1;
+
+    /* Add the connection to the server */
+    UA_StatusCode retval = UA_Server_addPubSubConnection(server, &connectionConfig, &ctx->nodes.pubConId);
+    
+    if(retval != UA_STATUSCODE_GOOD) {
+        UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, 
+                     "Failed to add PubSub connection. Error: %s", UA_StatusCode_name(retval));
+    } else {
+        UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, 
+                    "MQTT PubSub connection added successfully. ID: %u", ctx->nodes.pubConId.identifier.numeric);
+    }
+
+    return retval;
 }
