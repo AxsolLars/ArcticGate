@@ -1,0 +1,37 @@
+{
+    "files.associations": {
+        "stdlib.h": "c",
+        "chrono": "c",
+        "text_encoding": "c",
+        "typeinfo": "c",
+        "log_stdout.h": "c",
+        "charconv": "c",
+        "optional": "c",
+        "format": "c",
+        "ratio": "c",
+        "system_error": "c",
+        "array": "c",
+        "functional": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "utility": "c",
+        "server_pubsub.h": "c",
+        "collection.h": "c",
+        "util.h": "c",
+        "subscribeutil.h": "c",
+        "server.h": "c",
+        "unistd.h": "c",
+        "string": "c",
+        "string_view": "c",
+        "span": "c"
+    },
+    "cSpell.words": [
+        "opcua",
+        "PUBLISHERID",
+        "SRIOV",
+        "Uadp",
+        "UADPDATASETREADERMESSAGEDATATYPE",
+        "UADPNETWORKMESSAGECONTENTMASK",
+        "WRITERGROUPID"
+    ]
+}

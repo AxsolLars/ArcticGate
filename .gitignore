@@ -1,0 +1,14 @@
+# Ignore build artifacts and temp files
+*.o
+*.so
+*.a
+*.log
+
+# Ignore Python virtual env
+scripts/.venv/
+
+# Ignore open62541 build/output (entire folder)
+server/open62541/
+
+configs/*
+mosquitto/*

@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  mqtt-broker:
+      image: eclipse-mosquitto:latest
+      container_name: mqtt_broker
+      ports:
+        - "1883:1883"    # Default MQTT port
+        - "9001:9001"    # MQTT over WebSockets
+      volumes:
+        - ./mosquitto/config:/mosquitto/config
+        - ./mosquitto/data:/mosquitto/data
+        - ./mosquitto/log:/mosquitto/log
+      restart: unless-stopped
+  # The Publisher: Sends data out via PubSub
+  publisher:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    container_name: opcua_publisher
+    ports:
+      - "4841:4840" 
+    volumes:
+      - ./configs:/app/configs
+      - ./${ENV_FILE:-.env}:/app/.env:ro
+    environment:
+      - ID=0
+      - ROLE=pub
+      - DEBUG=${DEBUG:-false}
+      - CONFIG_DOCKER_DIR=/app/configs
+      - CONFIG_NAME=config.toml        # Changed to .json (ensure this matches your file)
+      - BROKER_IP=opc.tcp://mqtt-broker-ip:1883 # Added this for your MQTT logic
+      - SUBSCRIBE_PROTOCOL=UADP        # Added for your if-statements
+      - PUBLISH_PROTOCOL=MQTT          # Added for your if-statements
+    restart: unless-stopped
+
+  subscriber:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    container_name: opcua_subscriber
+    ports:
+      - "4842:4840" 
+    volumes:
+      - ./configs:/app/configs
+      - ./${ENV_FILE:-.env}:/app/.env:ro
+    environment:
+      - ID=0
+      - ROLE=sub
+      - DEBUG=${DEBUG:-false}
+      - CONFIG_DOCKER_DIR=/app/configs
+      - CONFIG_NAME=config.toml        # Changed to .json (ensure this matches your file)
+      - BROKER_IP=opc.tcp://mqtt-broker-ip:1883 # Added this for your MQTT logic
+      - SUBSCRIBE_PROTOCOL=UADP        # Added for your if-statements
+      - PUBLISH_PROTOCOL=UADP          # Added for your if-statements
+    restart: unless-stopped
+
+  # The Bridge: Acts as both a Subscriber and a Publisher
+  bridge:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    container_name: opcua_bridge
+    ports:
+      - "4840:4840"
+    volumes:
+      - ./configs:/app/configs
+      - ./${ENV_FILE:-.env}:/app/.env:ro
+    environment:
+      - ID=1
+      - ROLE=bridge
+      - DEBUG=${DEBUG:-true}
+      - CONFIG_DOCKER_DIR=/app/configs
+      - CONFIG_NAME=config.toml
+      - BROKER_IP=mqtt://mqtt-broker:1883
+      - SUBSCRIBE_PROTOCOL=UADP
+      - PUBLISH_PROTOCOL=UADP
+    depends_on:
+      - publisher
+      - mqtt-broker
+    restart: unless-stopped

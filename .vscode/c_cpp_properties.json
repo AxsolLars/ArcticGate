@@ -1,0 +1,19 @@
+{
+  "configurations": [
+    {
+      "name": "Linux",
+      "includePath": [
+        "${workspaceFolder}/server/pubsub/src/pubsub",
+        "${workspaceFolder}/server/pubsub/src/config",
+        "${workspaceFolder}/server/pubsub/src/utils",
+        "/usr/include",
+        "/usr/local/include"
+      ],
+      "defines": [],
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "c99",
+      "intelliSenseMode": "gcc-x64"
+    }
+  ],
+  "version": 4
+}

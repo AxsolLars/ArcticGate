@@ -1,0 +1,5 @@
+pubsub/build/
+*.o
+*.log
+**/build/
+my-server/

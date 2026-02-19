@@ -1,0 +1,46 @@
+# ================================
+# Build stage
+# ================================
+FROM debian:bookworm-slim AS build
+
+RUN apt-get update && apt-get install -y \
+    build-essential cmake git pkg-config libmbedtls-dev python3 \
+    && rm -rf /var/lib/apt/lists/*
+
+# ---- build open62541 ----
+WORKDIR /deps
+RUN git clone --branch v1.4.13 https://github.com/open62541/open62541.git && \
+    cmake -S open62541 -B build -DCMAKE_BUILD_TYPE=Release \
+          -DUA_BUILD_EXAMPLES=OFF -DUA_BUILD_TOOLS=OFF -DUA_ENABLE_PUBSUB=ON -DUA_ENABLE_PUBSUB_MQTT=ON && \
+    cmake --build build -j && \
+    cmake --install build --prefix /usr/local
+
+# ---- build your app ----
+WORKDIR /src
+COPY server/pubsub .
+RUN cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && \
+    cmake --build build -j
+
+# ================================
+# Runtime stage
+# ================================
+FROM debian:bookworm-slim
+
+# Install only runtime tools you want (optional)
+RUN apt-get update && apt-get install -y \
+    tcpdump iproute2 iputils-ping net-tools netcat-openbsd \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy only the final binary from build stage
+COPY --from=build /src/build/opcua_pubsub /usr/local/bin/opcua_pubsub
+
+# Optional: expose OPC UA ports
+EXPOSE 4840/tcp
+EXPOSE 4840/udp
+
+# ENTRYPOINT means you only pass args in compose
+ENTRYPOINT ["opcua_pubsub"]
+
+# No CMD → you override with docker-compose
