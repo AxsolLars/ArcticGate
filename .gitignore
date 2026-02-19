@@ -12,3 +12,5 @@ server/open62541/
 
 configs/*
 mosquitto/*
+
+server/pubsub/build
