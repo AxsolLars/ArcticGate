@@ -14,3 +14,4 @@ configs/*
 mosquitto/*
 
 server/pubsub/build
+server/pubsub/scripts
