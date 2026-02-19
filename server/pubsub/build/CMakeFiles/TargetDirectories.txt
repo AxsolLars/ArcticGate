@@ -1,3 +1,0 @@
-/home/Lars/docker/tig/opcua/pubsub/build/CMakeFiles/opcua_pubsub.dir
-/home/Lars/docker/tig/opcua/pubsub/build/CMakeFiles/edit_cache.dir
-/home/Lars/docker/tig/opcua/pubsub/build/CMakeFiles/rebuild_cache.dir
