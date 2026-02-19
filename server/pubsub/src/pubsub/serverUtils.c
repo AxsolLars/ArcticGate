@@ -165,7 +165,7 @@ Util_initializeReaderConfig(UA_DataSetReaderConfig * readerConfig, ServerContext
 
     UA_Variant_setScalarCopy(&readerConfig->publisherId,
                          &ctx->identifiers.publisherId,
-                         &UA_TYPES[UA_TYPES_UINT32]);
+                         &UA_TYPES[UA_TYPES_UINT16]);
         
     readerConfig->writerGroupId    = ctx->identifiers.groupId;
     readerConfig->dataSetWriterId  = 0;

@@ -23,7 +23,7 @@ typedef struct {
 
 /* Renamed from IntCollection to PubSubIdentifiers */
 typedef struct {
-    uint32_t publisherId;
+    uint16_t publisherId;
     uint16_t groupId;
     uint16_t writerId;
     uint16_t nsIndex;
