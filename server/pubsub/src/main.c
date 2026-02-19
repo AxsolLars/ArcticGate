@@ -95,7 +95,7 @@ int main(int argc, char **argv) {
         subscribeTransportProfile =
             UA_STRING("http://opcfoundation.org/UA-Profile/Transport/pubsub-udp-uadp");
         subscribeNetworkAddressUrl =
-            (UA_NetworkAddressUrlDataType){UA_STRING_NULL, UA_STRING("opc.udp://224.0.0.22:4840/")};
+            (UA_NetworkAddressUrlDataType){UA_STRING_NULL, UA_STRING("opc.udp://224.168.10.102:4840/")};
     } else{
         fprintf(stderr, "Protocol missing\n");
         return EXIT_FAILURE;
