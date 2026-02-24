@@ -9,16 +9,24 @@ RUN apt-get update && apt-get install -y \
 
 # ---- build open62541 ----
 WORKDIR /deps
-RUN git clone --branch v1.4.13 https://github.com/open62541/open62541.git && \
-    cmake -S open62541 -B build -DCMAKE_BUILD_TYPE=Release \
-          -DUA_BUILD_EXAMPLES=OFF -DUA_BUILD_TOOLS=OFF -DUA_ENABLE_PUBSUB=ON -DUA_ENABLE_PUBSUB_MQTT=ON && \
-    cmake --build build -j && \
-    cmake --install build --prefix /usr/local
+RUN git clone --recursive --branch v1.5.2 https://github.com/open62541/open62541.git && \
+    cd open62541 && \
+    cmake -B ../build -S . \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DUA_BUILD_EXAMPLES=OFF \
+    -DUA_BUILD_TOOLS=OFF \
+    -DUA_ENABLE_PUBSUB=ON \
+    -DUA_ENABLE_MQTT=ON \
+    -DUA_ENABLE_PUBSUB_MQTT=ON \
+    -DUA_ENABLE_JSON_ENCODING=ON && \
+    cmake --build ../build -j $(nproc) && \
+    cmake --install ../build --prefix /usr/local
 
 # ---- build your app ----
 WORKDIR /src
 COPY server/pubsub .
-RUN cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && \
+RUN rm -rf build && \
+    cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && \
     cmake --build build -j
 
 # ================================

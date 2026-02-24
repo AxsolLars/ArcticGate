@@ -29,31 +29,31 @@ services:
       - DEBUG=${DEBUG:-false}
       - CONFIG_DOCKER_DIR=/app/configs
       - CONFIG_NAME=config.toml        # Changed to .json (ensure this matches your file)
-      - BROKER_IP=opc.tcp://mqtt-broker-ip:1883 # Added this for your MQTT logic
+      - BROKER_IP=opc.mqtt://mqtt-broker-ip:1883 # Added this for your MQTT logic
       - SUBSCRIBE_PROTOCOL=UADP        # Added for your if-statements
       - PUBLISH_PROTOCOL=MQTT          # Added for your if-statements
     restart: unless-stopped
 
-  subscriber:
-    build:
-      context: .
-      dockerfile: server/Dockerfile
-    container_name: opcua_subscriber
-    ports:
-      - "4842:4840" 
-    volumes:
-      - ./configs:/app/configs
-      - ./${ENV_FILE:-.env}:/app/.env:ro
-    environment:
-      - ID=0
-      - ROLE=sub
-      - DEBUG=${DEBUG:-false}
-      - CONFIG_DOCKER_DIR=/app/configs
-      - CONFIG_NAME=config.toml        # Changed to .json (ensure this matches your file)
-      - BROKER_IP=opc.tcp://mqtt-broker-ip:1883 # Added this for your MQTT logic
-      - SUBSCRIBE_PROTOCOL=UADP        # Added for your if-statements
-      - PUBLISH_PROTOCOL=UADP          # Added for your if-statements
-    restart: unless-stopped
+#  subscriber:
+#    build:
+#      context: .
+#      dockerfile: server/Dockerfile
+#    container_name: opcua_subscriber
+#    ports:
+#      - "4842:4840" 
+#    volumes:
+#      - ./configs:/app/configs
+#      - ./${ENV_FILE:-.env}:/app/.env:ro
+#    environment:
+#      - ID=0
+#      - ROLE=sub
+#      - DEBUG=${DEBUG:-false}
+#      - CONFIG_DOCKER_DIR=/app/configs
+#      - CONFIG_NAME=config.toml        # Changed to .json (ensure this matches your file)
+#      - BROKER_IP=opc.tcp://mqtt-broker-ip:1883 # Added this for your MQTT logic
+#      - SUBSCRIBE_PROTOCOL=UADP        # Added for your if-statements
+#      - PUBLISH_PROTOCOL=UADP          # Added for your if-statements
+#    restart: unless-stopped
 
   # The Bridge: Acts as both a Subscriber and a Publisher
   bridge:
@@ -72,9 +72,15 @@ services:
       - DEBUG=${DEBUG:-true}
       - CONFIG_DOCKER_DIR=/app/configs
       - CONFIG_NAME=config.toml
-      - BROKER_IP=mqtt://mqtt-broker:1883
+      - BROKER_IP=opc.mqtt://mqtt-broker:1883
+      - MQTT_CLIENT_ID=opcua_bridge_1
+      - PUBLISH_TOPIC=factory/data/bridged
       - SUBSCRIBE_PROTOCOL=UADP
-      - PUBLISH_PROTOCOL=UADP
+      - PUBLISH_PROTOCOL=MQTT
+      - USE_JSON=true
+      - USE_MQTT=true
+      - META_QUEUE_NAME=factory/metadata/bridge
+      - META_UPDATE_TIME=10000
     depends_on:
       - publisher
       - mqtt-broker

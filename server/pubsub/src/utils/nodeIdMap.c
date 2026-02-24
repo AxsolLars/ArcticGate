@@ -26,7 +26,7 @@ void addNodeIdToMap(uint16_t id, UA_NodeId *nodeId, NodeIdMapEntry ** nodeMap) {
     NodeIdMapEntry *entry;
     
     // Check if ID already exists
-    HASH_FIND_INT(*nodeMap, &id, entry);
+    HASH_FIND(hh, *nodeMap, &id, sizeof(id), entry);
     
     if (entry == NULL) {
         entry = (NodeIdMapEntry*)malloc(sizeof(NodeIdMapEntry));
@@ -39,6 +39,6 @@ void addNodeIdToMap(uint16_t id, UA_NodeId *nodeId, NodeIdMapEntry ** nodeMap) {
 
 UA_NodeId* findNodeInMap(uint16_t id ,NodeIdMapEntry * nodeMap) {
     NodeIdMapEntry *entry;
-    HASH_FIND_INT(nodeMap, &id, entry);
+    HASH_FIND(hh, nodeMap, &id, sizeof(id), entry);
     return (entry) ? &entry->nodeId : NULL;
 }

@@ -19,6 +19,7 @@ static int typeFromString(const char *typeStr) {
     if(strcmp(typeStr, "Int32")  == 0) return UA_TYPES_INT32;
     if(strcmp(typeStr, "Real")   == 0) return UA_TYPES_FLOAT;
     if(strcmp(typeStr, "ByteString")   == 0) return UA_TYPES_BYTESTRING;
+    if(strcmp(typeStr, "Bool" ) == 0) return UA_TYPES_BYTESTRING;
     return -1;
 }
 
@@ -120,25 +121,20 @@ UA_StatusCode
 Util_addDataSetMetaData(UA_DataSetReaderConfig * readerConfig, char * fieldname, char * type, int currentIndex){
     UA_StatusCode retval = UA_STATUSCODE_GOOD;
     
-    // 1. Get a pointer to the existing metadata, do NOT copy the struct
     UA_DataSetMetaDataType *pMetaData = &readerConfig->dataSetMetaData;
 
-    // 2. Safety check: Ensure the fields array exists
     if (pMetaData->fieldsSize <= (size_t)currentIndex || pMetaData->fields == NULL) {
         UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, 
                      "MetaData Error: fields array is NULL or too small!");
         return UA_STATUSCODE_BADINTERNALERROR;
     }
 
-    // 3. Initialize the specific field using the pointer
     UA_FieldMetaData_init(&pMetaData->fields[currentIndex]);
 
-    // 4. Assign the name (UA_STRING_ALLOC is safer if fieldname is a local variable elsewhere)
     pMetaData->fields[currentIndex].name = UA_STRING_ALLOC(fieldname);
 
     int idx = typeFromString(type);
     
-    // 5. Check if idx is valid for the UA_TYPES array to avoid out-of-bounds crash
     if (idx < 0 || idx >= UA_TYPES_COUNT) {
          UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "Unknown type: %s", type);
          return UA_STATUSCODE_BADTYPEMISMATCH;
@@ -149,11 +145,10 @@ Util_addDataSetMetaData(UA_DataSetReaderConfig * readerConfig, char * fieldname,
     if(idx == UA_TYPES_BYTESTRING) {
         pMetaData->fields[currentIndex].builtInType = UA_NS0ID_BYTESTRING; 
     } else {
-        // Use the index directly from the UA_TYPES table
         pMetaData->fields[currentIndex].builtInType = (UA_Byte) UA_TYPES[idx].typeKind;
     }
 
-    pMetaData->fields[currentIndex].valueRank = UA_VALUERANK_SCALAR; // -1
+    pMetaData->fields[currentIndex].valueRank = UA_VALUERANK_SCALAR;
     return retval;
 }
 
@@ -168,7 +163,7 @@ Util_initializeReaderConfig(UA_DataSetReaderConfig * readerConfig, ServerContext
                          &UA_TYPES[UA_TYPES_UINT16]);
         
     readerConfig->writerGroupId    = ctx->identifiers.groupId;
-    readerConfig->dataSetWriterId  = 0;
+    readerConfig->dataSetWriterId  = ctx->identifiers.writerId;
     UA_UadpDataSetReaderMessageDataType *msgSettings = UA_UadpDataSetReaderMessageDataType_new();
     msgSettings->networkMessageContentMask = UA_UADPNETWORKMESSAGECONTENTMASK_PUBLISHERID |
     UA_UADPNETWORKMESSAGECONTENTMASK_GROUPHEADER |
@@ -208,33 +203,38 @@ Util_addDataSetReader(UA_Server *server, ServerContext * ctx, UA_DataSetReaderCo
                 "Reader: Successfully added Reader (NodeId ns=%u;i=%u)", 
                 ctx->nodes.readerId.namespaceIndex, ctx->nodes.readerId.identifier.numeric);
 
-    // Cleaning up the local config structure
+
     UA_LOG_DEBUG(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "Reader: Clearing readerConfig...");
     UA_DataSetReaderConfig_clear(readerConfig);
     
     return retval;
 }
+/*
 void 
 addDatasetWriterTransportSettings(UA_DataSetWriterConfig * dataSetWriterConfig, ServerContext * ctx){
-    UA_BrokerDataSetWriterTransportDataType brokerTransportSettings;
-    memset(&brokerTransportSettings, 0, sizeof(UA_BrokerDataSetWriterTransportDataType));
+    UA_BrokerDataSetWriterTransportDataType * brokerTransportSettings =
+        (UA_BrokerDataSetWriterTransportDataType*)UA_calloc(1, sizeof(*brokerTransportSettings));
+    if(!brokerTransportSettings) {
+        UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "OOM allocating brokerTransportSettings");
+        return;
+    }
 
-    /* Assign the Topic at which MQTT publish should happen */
-    brokerTransportSettings.queueName = UA_STRING(ctx->config.topic);
-    brokerTransportSettings.resourceUri = UA_STRING_NULL;
-    brokerTransportSettings.authenticationProfileUri = UA_STRING_NULL;
-    brokerTransportSettings.metaDataQueueName = UA_STRING(ctx->config.metaQueueName);
-    brokerTransportSettings.metaDataUpdateTime = ctx->config.metaUpdateTime;
 
-    /* Choose the QOS Level for MQTT */
-    brokerTransportSettings.requestedDeliveryGuarantee = UA_BROKERTRANSPORTQUALITYOFSERVICE_BESTEFFORT;
+    brokerTransportSettings->queueName = UA_STRING_ALLOC(ctx->config.topic);
+    brokerTransportSettings->resourceUri = UA_STRING_NULL;
+    brokerTransportSettings->authenticationProfileUri = UA_STRING_NULL;
+    brokerTransportSettings->metaDataQueueName = UA_STRING_ALLOC(ctx->config.metaQueueName);
+    brokerTransportSettings->metaDataUpdateTime = ctx->config.metaUpdateTime;
 
-    /* Encapsulate config in transportSettings */
+
+    brokerTransportSettings->requestedDeliveryGuarantee = UA_BROKERTRANSPORTQUALITYOFSERVICE_BESTEFFORT;
+
+
     UA_ExtensionObject transportSettings;
     memset(&transportSettings, 0, sizeof(UA_ExtensionObject));
     transportSettings.encoding = UA_EXTENSIONOBJECT_DECODED;
     transportSettings.content.decoded.type = &UA_TYPES[UA_TYPES_BROKERDATASETWRITERTRANSPORTDATATYPE];
-    transportSettings.content.decoded.data = &brokerTransportSettings;
+    transportSettings.content.decoded.data = brokerTransportSettings;
 
     dataSetWriterConfig->transportSettings = transportSettings;
 }
@@ -262,13 +262,41 @@ Util_addDataSetWriter(UA_Server * server, ServerContext * ctx, char* name){
     memset(&dswConf, 0, sizeof(dswConf));
     dswConf.name = UA_STRING(name);
     dswConf.dataSetWriterId = ctx->identifiers.writerId;
+    dswConf.keyFrameCount = 10;
+
+    UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+            "DSW: name=%.*s id=%u keyFrameCount=%u useJson=%s useMqtt=%s",
+            (int)dswConf.name.length, dswConf.name.data,
+            dswConf.dataSetWriterId,
+            dswConf.keyFrameCount,
+            ctx->config.useJson ? "true" : "false",
+            ctx->config.useMqtt ? "true" : "false");
+
     if(ctx->config.useJson){
         addDatasetWriterJSONEncoding(&dswConf);
     }
     if(ctx->config.useMqtt){
         addDatasetWriterTransportSettings(&dswConf, ctx);
+        if(dswConf.transportSettings.encoding != UA_EXTENSIONOBJECT_DECODED ||
+        dswConf.transportSettings.content.decoded.data == NULL) {
+            UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                        "DSW transportSettings invalid: encoding=%d data=%p",
+                        (int)dswConf.transportSettings.encoding,
+                        (void*)dswConf.transportSettings.content.decoded.data);
+        } else {
+            UA_BrokerDataSetWriterTransportDataType *b =
+                (UA_BrokerDataSetWriterTransportDataType*)
+                dswConf.transportSettings.content.decoded.data;
+
+            UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                        "DSW MQTT topic(queueName)=%.*s metaQueue=%.*s metaUpdateTime=%" PRIu64,
+                        (int)b->queueName.length, b->queueName.data,
+                        (int)b->metaDataQueueName.length, b->metaDataQueueName.data,
+                        (UA_UInt64)b->metaDataUpdateTime);
+        }
     }
     UA_NodeId dswId;
+
     retval |= UA_Server_addDataSetWriter(server,ctx->nodes.writerGroupId, ctx->nodes.publishedDataSetId, &dswConf, &dswId);
     if (retval != UA_STATUSCODE_GOOD) {
         UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
@@ -281,6 +309,53 @@ Util_addDataSetWriter(UA_Server * server, ServerContext * ctx, char* name){
         return retval;
     }
     return retval;
+}
+*/
+void
+Util_addDataSetWriter(UA_Server *server, ServerContext * ctx, char * name) {
+    UA_NodeId dataSetWriterIdent;
+    UA_DataSetWriterConfig dataSetWriterConfig;
+    memset(&dataSetWriterConfig, 0, sizeof(UA_DataSetWriterConfig));
+    dataSetWriterConfig.name = UA_STRING(name);
+    dataSetWriterConfig.dataSetWriterId = ctx->identifiers.writerId;
+    dataSetWriterConfig.keyFrameCount = 10;
+
+    UA_JsonDataSetWriterMessageDataType jsonDswMd;
+    UA_ExtensionObject messageSettings;
+    if(ctx->config.useJson) {
+        jsonDswMd.dataSetMessageContentMask = (UA_JsonDataSetMessageContentMask)
+            (UA_JSONDATASETMESSAGECONTENTMASK_DATASETWRITERID |
+             UA_JSONDATASETMESSAGECONTENTMASK_SEQUENCENUMBER |
+             UA_JSONDATASETMESSAGECONTENTMASK_STATUS |
+             UA_JSONDATASETMESSAGECONTENTMASK_METADATAVERSION |
+             UA_JSONDATASETMESSAGECONTENTMASK_TIMESTAMP);
+
+        messageSettings.encoding = UA_EXTENSIONOBJECT_DECODED;
+        messageSettings.content.decoded.type = &UA_TYPES[UA_TYPES_JSONDATASETWRITERMESSAGEDATATYPE];
+        messageSettings.content.decoded.data = &jsonDswMd;
+
+        dataSetWriterConfig.messageSettings = messageSettings;
+    }
+    UA_BrokerDataSetWriterTransportDataType brokerTransportSettings;
+    memset(&brokerTransportSettings, 0, sizeof(UA_BrokerDataSetWriterTransportDataType));
+
+    brokerTransportSettings.queueName = UA_STRING(ctx->config.topic);
+    brokerTransportSettings.resourceUri = UA_STRING_NULL;
+    brokerTransportSettings.authenticationProfileUri = UA_STRING_NULL;
+    brokerTransportSettings.metaDataQueueName = UA_STRING(ctx->config.metaQueueName);
+    brokerTransportSettings.metaDataUpdateTime = ctx->config.metaUpdateTime;
+
+    brokerTransportSettings.requestedDeliveryGuarantee = UA_BROKERTRANSPORTQUALITYOFSERVICE_BESTEFFORT;
+
+    UA_ExtensionObject transportSettings;
+    memset(&transportSettings, 0, sizeof(UA_ExtensionObject));
+    transportSettings.encoding = UA_EXTENSIONOBJECT_DECODED;
+    transportSettings.content.decoded.type = &UA_TYPES[UA_TYPES_BROKERDATASETWRITERTRANSPORTDATATYPE];
+    transportSettings.content.decoded.data = &brokerTransportSettings;
+
+    dataSetWriterConfig.transportSettings = transportSettings;
+    UA_Server_addDataSetWriter(server, ctx->nodes.writerGroupId, ctx->nodes.publishedDataSetId,
+                               &dataSetWriterConfig, &dataSetWriterIdent);
 }
 
 UA_StatusCode
@@ -330,14 +405,14 @@ Util_addReaderGroup(UA_Server *server, ServerContext * ctx) {
     return retval;
 }
 
-
+/*
 void
 initializeWriterGroupConfig(UA_WriterGroupConfig* writerGroupConfig, ServerContext * ctx, int interval, char * groupName){
     memset(writerGroupConfig, 0, sizeof(UA_WriterGroupConfig));
-    writerGroupConfig->name = UA_STRING(groupName);
+    writerGroupConfig->name = UA_STRING_ALLOC(groupName);
     writerGroupConfig->publishingInterval = interval;
     writerGroupConfig->enabled = UA_FALSE;
-    writerGroupConfig->writerGroupId = 100;
+    writerGroupConfig->writerGroupId = ctx->identifiers.groupId;
 }
 void
 addWriterGroupMessageUADP(UA_WriterGroupConfig * writerGroupConfig){
@@ -361,14 +436,9 @@ addWriterGroupMessageJson(UA_WriterGroupConfig* writerGroupConfig){
     writerGroupConfig->messageSettings.encoding             = UA_EXTENSIONOBJECT_DECODED;
 
     writerGroupConfig->messageSettings.content.decoded.type = &UA_TYPES[UA_TYPES_JSONWRITERGROUPMESSAGEDATATYPE];
-    /* The configuration flags for the messages are encapsulated inside the
-        * message- and transport settings extension objects. These extension
-        * objects are defined by the standard. e.g.
-        * UadpWriterGroupMessageDataType */
+
     Json_writerGroupMessage = UA_JsonWriterGroupMessageDataType_new();
-    /* Change message settings of writerGroup to send PublisherId,
-        * DataSetMessageHeader, SingleDataSetMessage and DataSetClassId in PayloadHeader
-        * of NetworkMessage */
+
     Json_writerGroupMessage->networkMessageContentMask =
         (UA_JsonNetworkMessageContentMask)(UA_JSONNETWORKMESSAGECONTENTMASK_NETWORKMESSAGEHEADER |
         (UA_JsonNetworkMessageContentMask)UA_JSONNETWORKMESSAGECONTENTMASK_DATASETMESSAGEHEADER |
@@ -380,7 +450,7 @@ addWriterGroupMessageJson(UA_WriterGroupConfig* writerGroupConfig){
 void 
 addTransportSettings(UA_WriterGroupConfig* writerGroupConfig, ServerContext * ctx){
     UA_BrokerWriterGroupTransportDataType * brokerTransportSettings = UA_BrokerWriterGroupTransportDataType_new();
-    brokerTransportSettings->queueName = UA_STRING(ctx->config.topic);
+    brokerTransportSettings->queueName = UA_STRING_ALLOC(ctx->config.topic);
     brokerTransportSettings->resourceUri = UA_STRING_NULL;
     brokerTransportSettings->authenticationProfileUri = UA_STRING_NULL;
 
@@ -390,33 +460,73 @@ addTransportSettings(UA_WriterGroupConfig* writerGroupConfig, ServerContext * ct
     memset(&transportSettings, 0, sizeof(UA_ExtensionObject));
     transportSettings.encoding = UA_EXTENSIONOBJECT_DECODED;
     transportSettings.content.decoded.type = &UA_TYPES[UA_TYPES_BROKERWRITERGROUPTRANSPORTDATATYPE];
-    transportSettings.content.decoded.data = &brokerTransportSettings;
+    transportSettings.content.decoded.data = brokerTransportSettings;
 
     writerGroupConfig->transportSettings = transportSettings;
 }
+
 UA_StatusCode
 Util_addWriterGroup(UA_Server *server, ServerContext * ctx, int interval, char * groupName) {
     UA_StatusCode retval = UA_STATUSCODE_GOOD;
 
+    UA_LOG_DEBUG(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                 "Util_addWriterGroup: enter (interval=%d, groupName='%s')",
+                 interval, groupName ? groupName : "(null)");
+
+    UA_LOG_DEBUG(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                 "Util_addWriterGroup: ctx config (useJson=%s, useMqtt=%s)",
+                 ctx->config.useJson ? "true" : "false",
+                 ctx->config.useMqtt ? "true" : "false");
+
+    UA_LOG_DEBUG(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                 "Util_addWriterGroup: pubConId (ns=%u;i=%u)",
+                 ctx->nodes.pubConId.namespaceIndex,
+                 ctx->nodes.pubConId.identifier.numeric);
 
     UA_WriterGroupConfig writerGroupConfig;
+
+    UA_LOG_DEBUG(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                 "Util_addWriterGroup: initializing WriterGroupConfig...");
     initializeWriterGroupConfig(&writerGroupConfig, ctx, interval, groupName);
 
-
-
     if (ctx->config.useJson){
+        UA_LOG_DEBUG(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                     "Util_addWriterGroup: adding JSON WriterGroup message settings");
         addWriterGroupMessageJson(&writerGroupConfig);
     } else {
+        UA_LOG_DEBUG(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                     "Util_addWriterGroup: adding UADP WriterGroup message settings");
         addWriterGroupMessageUADP(&writerGroupConfig);
     }
 
     if (ctx->config.useMqtt){
+        UA_LOG_DEBUG(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                     "Util_addWriterGroup: adding transport settings (MQTT)");
         addTransportSettings(&writerGroupConfig, ctx);
     }
 
+    UA_LOG_DEBUG(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                 "Util_addWriterGroup: calling UA_Server_addWriterGroup...");
     retval = UA_Server_addWriterGroup(server, ctx->nodes.pubConId, &writerGroupConfig, &ctx->nodes.writerGroupId);
 
-    UA_WriterGroupConfig_clear(&writerGroupConfig);
+    UA_LOG_DEBUG(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                 "Util_addWriterGroup: UA_Server_addWriterGroup returned 0x%08x (%s)",
+                 retval, UA_StatusCode_name(retval));
+
+    UA_String_clear(&writerGroupConfig.name);
+
+    // 2. Free the message settings data (the JSON or UADP object)
+    if(writerGroupConfig.messageSettings.content.decoded.data) {
+        UA_delete(writerGroupConfig.messageSettings.content.decoded.data, 
+                  writerGroupConfig.messageSettings.content.decoded.type);
+    }
+
+    // 3. Free the transport settings data (the Broker object)
+    if(writerGroupConfig.transportSettings.content.decoded.data) {
+        // We use UA_delete because we used UA_BrokerWriterGroupTransportDataType_new()
+        UA_delete(writerGroupConfig.transportSettings.content.decoded.data, 
+                  writerGroupConfig.transportSettings.content.decoded.type);
+    }
 
     if (retval != UA_STATUSCODE_GOOD){
         UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
@@ -433,6 +543,10 @@ Util_addWriterGroup(UA_Server *server, ServerContext * ctx, int interval, char *
                     ctx->nodes.writerGroupId.identifier.numeric);
     }
 
+    UA_LOG_DEBUG(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                 "Util_addWriterGroup: setting WriterGroup operational (ns=%u;i=%u)...",
+                 ctx->nodes.writerGroupId.namespaceIndex,
+                 ctx->nodes.writerGroupId.identifier.numeric);
 
     retval = UA_Server_setWriterGroupOperational(server, ctx->nodes.writerGroupId);
 
@@ -444,6 +558,104 @@ Util_addWriterGroup(UA_Server *server, ServerContext * ctx, int interval, char *
                     retval,
                     UA_StatusCode_name(retval));
         return retval;
+    }
+
+    UA_LOG_DEBUG(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                 "Util_addWriterGroup: exit OK (ns=%u;i=%u)",
+                 ctx->nodes.writerGroupId.namespaceIndex,
+                 ctx->nodes.writerGroupId.identifier.numeric);
+
+    return retval;
+}
+*/
+UA_StatusCode
+Util_addWriterGroup(UA_Server *server, ServerContext *ctx, int interval, char * groupName) {
+    UA_StatusCode retval = UA_STATUSCODE_GOOD;
+    /* Now we create a new WriterGroupConfig and add the group to the existing PubSubConnection. */
+    UA_WriterGroupConfig writerGroupConfig;
+    memset(&writerGroupConfig, 0, sizeof(UA_WriterGroupConfig));
+    writerGroupConfig.name = UA_STRING(groupName);
+    writerGroupConfig.publishingInterval = interval;
+    writerGroupConfig.enabled = UA_FALSE;
+    writerGroupConfig.writerGroupId = ctx->identifiers.groupId;
+    UA_UadpWriterGroupMessageDataType *writerGroupMessage;
+
+    UA_JsonWriterGroupMessageDataType *Json_writerGroupMessage;
+
+    if(ctx->config.useJson) {
+        writerGroupConfig.encodingMimeType = UA_PUBSUB_ENCODING_JSON;
+        writerGroupConfig.messageSettings.encoding             = UA_EXTENSIONOBJECT_DECODED;
+
+        writerGroupConfig.messageSettings.content.decoded.type = &UA_TYPES[UA_TYPES_JSONWRITERGROUPMESSAGEDATATYPE];
+        /* The configuration flags for the messages are encapsulated inside the
+         * message- and transport settings extension objects. These extension
+         * objects are defined by the standard. e.g.
+         * UadpWriterGroupMessageDataType */
+        Json_writerGroupMessage = UA_JsonWriterGroupMessageDataType_new();
+        /* Change message settings of writerGroup to send PublisherId,
+         * DataSetMessageHeader, SingleDataSetMessage and DataSetClassId in PayloadHeader
+         * of NetworkMessage */
+        Json_writerGroupMessage->networkMessageContentMask =
+            (UA_JsonNetworkMessageContentMask)(UA_JSONNETWORKMESSAGECONTENTMASK_NETWORKMESSAGEHEADER |
+            (UA_JsonNetworkMessageContentMask)UA_JSONNETWORKMESSAGECONTENTMASK_DATASETMESSAGEHEADER |
+            (UA_JsonNetworkMessageContentMask)UA_JSONNETWORKMESSAGECONTENTMASK_SINGLEDATASETMESSAGE |
+            (UA_JsonNetworkMessageContentMask)UA_JSONNETWORKMESSAGECONTENTMASK_PUBLISHERID |
+            (UA_JsonNetworkMessageContentMask)UA_JSONNETWORKMESSAGECONTENTMASK_DATASETCLASSID);
+        writerGroupConfig.messageSettings.content.decoded.data = Json_writerGroupMessage;
+    }
+
+    else
+    {
+        writerGroupConfig.encodingMimeType = UA_PUBSUB_ENCODING_UADP;
+        writerGroupConfig.messageSettings.encoding             = UA_EXTENSIONOBJECT_DECODED;
+        writerGroupConfig.messageSettings.content.decoded.type = &UA_TYPES[UA_TYPES_UADPWRITERGROUPMESSAGEDATATYPE];
+        /* The configuration flags for the messages are encapsulated inside the
+         * message- and transport settings extension objects. These extension
+         * objects are defined by the standard. e.g.
+         * UadpWriterGroupMessageDataType */
+        writerGroupMessage  = UA_UadpWriterGroupMessageDataType_new();
+        /* Change message settings of writerGroup to send PublisherId,
+         * WriterGroupId in GroupHeader and DataSetWriterId in PayloadHeader
+         * of NetworkMessage */
+        writerGroupMessage->networkMessageContentMask =
+            (UA_UadpNetworkMessageContentMask)(UA_UADPNETWORKMESSAGECONTENTMASK_PUBLISHERID |
+            (UA_UadpNetworkMessageContentMask)UA_UADPNETWORKMESSAGECONTENTMASK_GROUPHEADER |
+            (UA_UadpNetworkMessageContentMask)UA_UADPNETWORKMESSAGECONTENTMASK_WRITERGROUPID |
+            (UA_UadpNetworkMessageContentMask)UA_UADPNETWORKMESSAGECONTENTMASK_PAYLOADHEADER);
+        writerGroupConfig.messageSettings.content.decoded.data = writerGroupMessage;
+    }
+
+    UA_BrokerWriterGroupTransportDataType brokerTransportSettings;
+    memset(&brokerTransportSettings, 0, sizeof(UA_BrokerWriterGroupTransportDataType));
+
+    brokerTransportSettings.queueName = UA_STRING(ctx->config.topic);
+    brokerTransportSettings.resourceUri = UA_STRING_NULL;
+    brokerTransportSettings.authenticationProfileUri = UA_STRING_NULL;
+
+    brokerTransportSettings.requestedDeliveryGuarantee = UA_BROKERTRANSPORTQUALITYOFSERVICE_BESTEFFORT;
+
+    UA_ExtensionObject transportSettings;
+    memset(&transportSettings, 0, sizeof(UA_ExtensionObject));
+    transportSettings.encoding = UA_EXTENSIONOBJECT_DECODED;
+    transportSettings.content.decoded.type = &UA_TYPES[UA_TYPES_BROKERWRITERGROUPTRANSPORTDATATYPE];
+    transportSettings.content.decoded.data = &brokerTransportSettings;
+
+    writerGroupConfig.transportSettings = transportSettings;
+    UA_LOG_DEBUG(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                 "Util_addWriterGroup: pubConId (ns=%u;i=%u)",
+                 ctx->nodes.pubConId.namespaceIndex,
+                 ctx->nodes.pubConId.identifier.numeric);
+    retval = UA_Server_addWriterGroup(server, ctx->nodes.pubConId, &writerGroupConfig, &ctx->nodes.writerGroupId);
+
+    if (retval == UA_STATUSCODE_GOOD)
+        UA_Server_setWriterGroupOperational(server, ctx->nodes.writerGroupId);
+
+    if (ctx->config.useJson) {
+        UA_JsonWriterGroupMessageDataType_delete(Json_writerGroupMessage);
+    }
+
+    if (!ctx->config.useJson && writerGroupMessage) {
+        UA_UadpWriterGroupMessageDataType_delete(writerGroupMessage);
     }
 
     return retval;
@@ -555,7 +767,9 @@ Util_addMqttPubConnection(UA_Server *server, UA_NetworkAddressUrlDataType *netwo
     UA_PubSubConnectionConfig connectionConfig;
     memset(&connectionConfig, 0, sizeof(connectionConfig));
     connectionConfig.name = UA_STRING("MQTTpublisher");
-    
+    UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+            "MQTT URL used by open62541: '%.*s'",
+            (int)networkAddressUrl->url.length, networkAddressUrl->url.data);
     /* Determine Transport Profile */
     if(ctx->config.useJson) {
         UA_LOG_DEBUG(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "Using JSON transport profile.");
@@ -576,8 +790,13 @@ Util_addMqttPubConnection(UA_Server *server, UA_NetworkAddressUrlDataType *netwo
     UA_LOG_DEBUG(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "MQTT Client ID: %.*s", 
                  (int)mqttClientId.length, mqttClientId.data);
 
-    connectionOptions[0].key = UA_QUALIFIEDNAME(0, "mqttClientId"); // Common key name for MQTT
-    UA_Variant_setScalar(&connectionOptions[0].value, &mqttClientId, &UA_TYPES[UA_TYPES_STRING]);
+    connectionOptions[0].key = UA_QUALIFIEDNAME(0, ctx->config.mqttClientId); 
+    UA_Variant_setScalarCopy(&connectionOptions[0].value, &mqttClientId, &UA_TYPES[UA_TYPES_STRING]);
+    
+
+    UA_UInt16 pubId = UA_UInt16_random();
+    UA_Variant_setScalarCopy(&connectionConfig.publisherId, &pubId,
+                            &UA_TYPES[UA_TYPES_UINT16]);
 
     connectionConfig.connectionProperties.map = connectionOptions;
     connectionConfig.connectionProperties.mapSize = 1;

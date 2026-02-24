@@ -1,0 +1,20 @@
+[[publishers]]
+name = "test"
+publisherId = 41
+
+[[publishers.writerGroups]]
+id = 22
+interval = 1000
+name = "Processors / CPU"
+
+[[publishers.writerGroups.dataSets]]
+writerId = 0
+name = "core_105"
+fields = [
+    { name = "null", type = "Float" },
+    { name = "eins", type = "UInt32" },
+    { name = "zwei", type = "ByteString" },
+    { name = "drei", type = "Float" },
+    { name = "vier", type = "DateTime" },
+    { name = "fünf", type = "Float" },
+]

@@ -229,9 +229,10 @@ Pub_addPubSubConnection(UA_Server *server, UA_String *transportProfile,
                          &UA_TYPES[UA_TYPES_NETWORKADDRESSURLDATATYPE]);
 
     
-    connectionConfig.publisherIdType = UA_PUBLISHERIDTYPE_UINT32;
-    connectionConfig.publisherId.uint32 = ids->publisherId;
+    UA_UInt16 pubId = (UA_UInt16)ids->publisherId;
+    UA_Variant_setScalarCopy(&connectionConfig.publisherId, &pubId,
+                            &UA_TYPES[UA_TYPES_UINT16]);
     
-    printf("publisherId %u\n", connectionConfig.publisherId.uint32);
+    printf("publisherId %u\n", connectionConfig.publisherId);
     return UA_Server_addPubSubConnection (server, &connectionConfig, &ids->conId);
 }

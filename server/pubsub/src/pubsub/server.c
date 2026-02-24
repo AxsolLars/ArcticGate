@@ -12,9 +12,17 @@
 #include "serverUtils.h"
 
 UA_StatusCode 
-Server_addDataset(UA_Server *server, DataSetConfig *dataSetConf, ServerContext * ids){
+Server_addDataset(UA_Server *server, DataSetConfig *dataSetConf, ServerContext * ctx){
     UA_StatusCode retval = UA_STATUSCODE_GOOD;
-    
+
+    char buffer[128];  
+    snprintf(buffer, sizeof(buffer),
+            "/group/%u/%s",
+            ctx->identifiers.groupId,
+            dataSetConf->name);
+
+    ctx->config.topic = strdup(buffer);
+
     if(!dataSetConf) {
         UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "DS: dataSetConf is NULL!");
         return UA_STATUSCODE_BADARGUMENTSMISSING;
@@ -23,8 +31,8 @@ Server_addDataset(UA_Server *server, DataSetConfig *dataSetConf, ServerContext *
     UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "DS: Starting Dataset '%s' (WriterID: %u)", 
                 dataSetConf->name ? dataSetConf->name : "NULL", dataSetConf->writerId);
 
-    ids->identifiers.writerId = dataSetConf->writerId;
-
+    ctx->identifiers.writerId = dataSetConf->writerId;
+    
     UA_DataSetReaderConfig readerConfig;
     memset(&readerConfig, 0, sizeof(UA_DataSetReaderConfig));
 
@@ -32,15 +40,17 @@ Server_addDataset(UA_Server *server, DataSetConfig *dataSetConf, ServerContext *
     Util_initializeDataSetMetaData(&readerConfig, dataSetConf->fieldCount);
 
     // Allocate targetVars
-    UA_FieldTargetVariable *targetVars = (UA_FieldTargetVariable *)
-        UA_calloc(dataSetConf->fieldCount, sizeof(UA_FieldTargetVariable));
+    UA_FieldTargetDataType *targetVars =
+    (UA_FieldTargetDataType *)UA_calloc(
+        dataSetConf->fieldCount,
+        sizeof(UA_FieldTargetDataType));
     
     if(!targetVars && dataSetConf->fieldCount > 0) {
         UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "DS: Allocation for targetVars failed!");
         return UA_STATUSCODE_BADOUTOFMEMORY;
     }
 
-    retval |= Util_addPublishedDataSet(server, ids, dataSetConf->name);
+    retval |= Util_addPublishedDataSet(server, ctx, dataSetConf->name);
     if(retval != UA_STATUSCODE_GOOD) {
         UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "DS: Add PublishedDataSet failed");
         UA_free(targetVars);
@@ -58,49 +68,49 @@ Server_addDataset(UA_Server *server, DataSetConfig *dataSetConf, ServerContext *
         }
 
         UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "DS: [Loop %d] Point 2: Calling Util_addVariableNode for '%s'", i, field->name);
-        retval |= Util_addVariableNode(server, ids, field->name, field->type);
+        retval |= Util_addVariableNode(server, ctx, field->name, field->type);
 
         UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "DS: [Loop %d] Point 3: Calling Util_initializeDataSetFieldConfig", i);
         UA_DataSetFieldConfig dsfConf;
-        Util_initializeDataSetFieldConfig(&dsfConf, field->name, field->type, ids);
+        Util_initializeDataSetFieldConfig(&dsfConf, field->name, field->type, ctx);
 
         UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "DS: [Loop %d] Point 4: Calling Util_addDataSetField", i);
-        retval |= Util_addDataSetField(server, ids, &dsfConf);
+        retval |= Util_addDataSetField(server, ctx, &dsfConf);
         
         UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "DS: [Loop %d] Point 5: Calling Util_addDataSetMetaData", i);
         retval |= Util_addDataSetMetaData(&readerConfig, field->name, field->type, i);
         
         UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "DS: [Loop %d] Point 6: Calling Util_addTargetVariable", i);
-        Util_addTargetVariable(targetVars, ids, i);
+        Util_addTargetVariable(targetVars, ctx, i);
         
         UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "DS: [Loop %d] Point 7: Iteration success", i);
     }
 
     UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "DS: Loop finished. Initializing ReaderConfig...");
 
-    Util_initializeReaderConfig(&readerConfig, ids, dataSetConf->name);
-    retval |= Util_addDataSetReader(server, ids, &readerConfig);
+    Util_initializeReaderConfig(&readerConfig, ctx, dataSetConf->name);
+    retval |= Util_addDataSetReader(server, ctx, &readerConfig);
 
     UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "DS: Creating Target Variables...");
-    retval |= UA_Server_DataSetReader_createTargetVariables(server, ids->nodes.readerId,
+    retval |= UA_Server_DataSetReader_createTargetVariables(server, ctx->nodes.readerId,
                                                            dataSetConf->fieldCount, targetVars);
 
     // Memory Cleanup for targetVars
     UA_LOG_DEBUG(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "DS: Cleaning targetVars...");
     for(size_t i = 0; i < dataSetConf->fieldCount; i++) {
-        UA_FieldTargetDataType_clear(&targetVars[i].targetVariable);
+     UA_FieldTargetDataType_clear(&targetVars[i]);
     }
     UA_free(targetVars); // Use UA_free to match UA_calloc
 
     UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "DS: Adding DataSetWriter...");
-    retval |= Util_addDataSetWriter(server, ids, dataSetConf->name);
+    retval |= Util_addDataSetWriter(server, ctx, dataSetConf->name);
 
     UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "DS: Dataset '%s' complete.", dataSetConf->name);
     return retval;
 }
 
 UA_StatusCode
-Server_addGroup(UA_Server *server, WriterGroupConfig * groupConf, ServerContext * ids, NodeIdMapEntry ** writerGroupIdMap){
+Server_addGroup(UA_Server *server, WriterGroupConfig * groupConf, ServerContext * ctx, NodeIdMapEntry ** writerGroupIdMap){
     UA_StatusCode retval = UA_STATUSCODE_GOOD;
     
     if (!groupConf) {
@@ -111,11 +121,17 @@ Server_addGroup(UA_Server *server, WriterGroupConfig * groupConf, ServerContext 
     UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "Group: Processing Group '%s' (ID: %u)", 
                 groupConf->name ? groupConf->name : "NULL", groupConf->groupId);
 
-    ids->identifiers.groupId = groupConf->groupId;
+    
+    ctx->identifiers.groupId = groupConf->groupId;
 
-    // adds reader Group
+
+    char buffer[64];
+    snprintf(buffer, sizeof(buffer), "/group/%u", ctx->identifiers.groupId);
+
+    ctx->config.topic = strdup(buffer);
+
     UA_LOG_DEBUG(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "Group: Calling Util_addReaderGroup...");
-    retval |= Util_addReaderGroup(server, ids);
+    retval |= Util_addReaderGroup(server, ctx);
     if(retval != UA_STATUSCODE_GOOD) {
         UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "addReaderGroup failed: 0x%08x", retval);
         return retval;
@@ -127,18 +143,18 @@ Server_addGroup(UA_Server *server, WriterGroupConfig * groupConf, ServerContext 
 
     if (foundWriterGroupId == NULL) {
         UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "Group: WriterGroup not in map. Creating new one...");
-        retval |= Util_addWriterGroup(server, ids, groupConf->interval, groupConf->name);
+        retval |= Util_addWriterGroup(server, ctx, groupConf->interval, groupConf->name);
         if(retval != UA_STATUSCODE_GOOD) {
             UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "addWriterGroup failed: 0x%08x", retval);
             return retval;
         }
         
         UA_LOG_DEBUG(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "Group: Adding new NodeId to map...");
-        addNodeIdToMap(groupConf->groupId, &ids->nodes.writerGroupId, writerGroupIdMap);
+        addNodeIdToMap(groupConf->groupId, &ctx->nodes.writerGroupId, writerGroupIdMap);
     } else {
         UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "Group: WriterGroup found in map. Reusing NodeId.");
         // WARNING: Shpallow copy might cause issues if the original NodeId is cleared!
-        ids->nodes.writerGroupId = *foundWriterGroupId;
+        ctx->nodes.writerGroupId = *foundWriterGroupId;
     }
 
     UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "Group: Starting DataSet loop (%d datasets)", groupConf->dataSetCount);
@@ -152,7 +168,7 @@ Server_addGroup(UA_Server *server, WriterGroupConfig * groupConf, ServerContext 
              return UA_STATUSCODE_BADINTERNALERROR;
         }
 
-        retval |= Server_addDataset(server, groupConf->dataSets[i], ids);
+        retval |= Server_addDataset(server, groupConf->dataSets[i], ctx);
         
         if(retval != UA_STATUSCODE_GOOD) {
             UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "Server_addDataset [%d] failed: 0x%08x", i, retval);
@@ -166,7 +182,7 @@ Server_addGroup(UA_Server *server, WriterGroupConfig * groupConf, ServerContext 
 }
 
 UA_StatusCode 
-Server_addPublisher(UA_Server *server, PublisherConfig * pubConf, ServerContext * ids, NodeIdMapEntry ** writerGroupIdMap){
+Server_addPublisher(UA_Server *server, PublisherConfig * pubConf, ServerContext * ctx, NodeIdMapEntry ** writerGroupIdMap){
     UA_StatusCode retval = UA_STATUSCODE_GOOD;
     
     if(!pubConf) {
@@ -178,11 +194,11 @@ Server_addPublisher(UA_Server *server, PublisherConfig * pubConf, ServerContext 
                 pubConf->name ? pubConf->name : "NULL", pubConf->publisherId);
 
     // Adds the current publisher Id to the ServerContext
-    ids->identifiers.publisherId = pubConf->publisherId;
+    ctx->identifiers.publisherId = pubConf->publisherId;
 
     // Adds the current publisher Object to the Server
     UA_LOG_DEBUG(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "Pub: Calling Util_addPublisherObject...");
-    retval |= Util_addPublisherObject(server, ids, pubConf->name);
+    retval |= Util_addPublisherObject(server, ctx, pubConf->name);
     if(retval != UA_STATUSCODE_GOOD) {
         UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
                     "addPublisherObject failed: 0x%08x", retval);
@@ -200,7 +216,7 @@ Server_addPublisher(UA_Server *server, PublisherConfig * pubConf, ServerContext 
             return UA_STATUSCODE_BADINTERNALERROR;
         }
 
-        retval |= Server_addGroup(server, pubConf->writerGroups[i], ids, writerGroupIdMap);
+        retval |= Server_addGroup(server, pubConf->writerGroups[i], ctx, writerGroupIdMap);
         
         if(retval != UA_STATUSCODE_GOOD) {
             UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
@@ -216,11 +232,11 @@ Server_addPublisher(UA_Server *server, PublisherConfig * pubConf, ServerContext 
 }
 
 UA_StatusCode 
-Server_addSysConfig(UA_Server *server, SystemConfig * sysConf, ServerContext* ids){
+Server_addSysConfig(UA_Server *server, SystemConfig * sysConf, ServerContext* ctx){
     UA_StatusCode retval = UA_STATUSCODE_GOOD;
     
     UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "AddSysConfig: Starting Subscribed Variables...");
-    retval |= Util_addSubscribedVariables(server, ids);
+    retval |= Util_addSubscribedVariables(server, ctx);
     if(retval != UA_STATUSCODE_GOOD) {
         UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
                     "addSubscribedVariables failed: 0x%08x", retval);
@@ -240,7 +256,7 @@ Server_addSysConfig(UA_Server *server, SystemConfig * sysConf, ServerContext* id
             return UA_STATUSCODE_BADINTERNALERROR;
         }
 
-        retval |= Server_addPublisher(server, sysConf->publishers[i], ids, &writerGroupIdMap);
+        retval |= Server_addPublisher(server, sysConf->publishers[i], ctx, &writerGroupIdMap);
         
         if(retval != UA_STATUSCODE_GOOD) {
             UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
@@ -251,7 +267,7 @@ Server_addSysConfig(UA_Server *server, SystemConfig * sysConf, ServerContext* id
         UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "AddSysConfig: Publisher [%d] added. Clearing ServerContext...", i);
         
         // Critical Section: If it crashes here, ServerContextClear has a memory bug
-        ServerContextClear(ids);
+        ServerContextClear(ctx);
         
         UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "AddSysConfig: ServerContext cleared for Publisher [%d].", i);
     }
@@ -272,7 +288,8 @@ int runServer(
     UA_String* publishTransportProfile, 
     UA_NetworkAddressUrlDataType*  publishNetworkAddressUrl, 
     SystemConfig* sysConf, 
-    bool debug){
+    bool debug,
+    ServerConfig serverConfig){
         UA_StatusCode retval = UA_STATUSCODE_GOOD;
         // Add server
         UA_Server *server = UA_Server_new();
@@ -281,24 +298,31 @@ int runServer(
         static UA_Logger logger;
         if (debug){
             
-            logger = UA_Log_Stdout_withLevel(UA_LOGLEVEL_DEBUG);
+            logger = UA_Log_Stdout_withLevel(UA_LOGLEVEL_TRACE);
             
         } else {
             logger = UA_Log_Stdout_withLevel(UA_LOGLEVEL_WARNING);
         }
         config->logging = &logger;
         // Create Id collection -> dynamically changing
-        ServerContext * ids = malloc(sizeof(ServerContext));
-        ServerContextInit(ids);
+        ServerContext * ctx = malloc(sizeof(ServerContext));
+        ServerContextInit(ctx);
+        ctx->config = serverConfig;
         // Add connection for Subscribing
-        retval |= Util_addSubConnection(server, subscribeTransportProfile, subscribeNetworkAddressUrl, ids);
+        retval |= Util_addSubConnection(server, subscribeTransportProfile, subscribeNetworkAddressUrl, ctx);
         if(retval != UA_STATUSCODE_GOOD) {
             UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
                         "addSubConnection failed: 0x%08x", retval);
             return retval;
         }
         // Add connection for Publishing
-        retval |= Util_addUdpPubConnection(server, publishTransportProfile, publishNetworkAddressUrl, ids);
+        UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "MQTT flag set to %s", ctx->config.useMqtt ? "true" : "false" );
+        if(ctx->config.useMqtt){
+            retval |= Util_addMqttPubConnection(server, publishNetworkAddressUrl, ctx);
+        } else {
+            retval |= Util_addUdpPubConnection(server, publishTransportProfile, publishNetworkAddressUrl, ctx);
+        }
+        
         if(retval != UA_STATUSCODE_GOOD) {
             UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
                         "addPubConnection failed: 0x%08x", retval);
@@ -306,7 +330,7 @@ int runServer(
         }
         
         // Start Recursive construction with Systemstemconfig
-        retval |= Server_addSysConfig(server, sysConf, ids);
+        retval |= Server_addSysConfig(server, sysConf, ctx);
         if (retval != UA_STATUSCODE_GOOD){
             UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "SysConfig failed");
             return EXIT_FAILURE;
@@ -315,7 +339,7 @@ int runServer(
             retval |= UA_Server_runUntilInterrupt(server);
         }
         
-        free(ids);
+        free(ctx);
         UA_Server_delete(server);
         return retval == UA_STATUSCODE_GOOD ? EXIT_SUCCESS : EXIT_FAILURE;
     }

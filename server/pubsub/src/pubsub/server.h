@@ -21,7 +21,8 @@ int runServer(UA_String* subscribeTransportProfile,
               UA_String* publishTransportProfile, 
               UA_NetworkAddressUrlDataType* publishNetworkAddressUrl, 
               SystemConfig* sysConf, 
-              bool debug);
+              bool debug, 
+              ServerConfig serverConfig);
 
 /**
  * Recursive builder functions that map the SystemConfig hierarchy

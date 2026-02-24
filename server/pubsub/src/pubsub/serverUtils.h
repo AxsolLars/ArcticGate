@@ -81,8 +81,10 @@ Util_addDataSetReader(UA_Server *server, ServerContext * ctx, UA_DataSetReaderCo
 void
 Util_addTargetVariable(UA_FieldTargetVariable  * targetVars, ServerContext * ctx, size_t index);
 
+UA_StatusCode
+Util_addMqttPubConnection(UA_Server *server, UA_NetworkAddressUrlDataType *networkAddressUrl, ServerContext * ctx);
 #ifdef __cplusplus
-}
+
 #endif
 
 #endif /* UTILS_H */

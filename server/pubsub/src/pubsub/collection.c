@@ -47,77 +47,84 @@ void ServerContextInit(ServerContext *ctx) {
     memset(ctx, 0, sizeof(ServerContext));
     
     // Initialize all NodeIds to NULL
-    ctx->nodes.subConId       = UA_NODEID_NULL;
-    ctx->nodes.pubConId       = UA_NODEID_NULL;
-    ctx->nodes.subNodeId   = UA_NODEID_NULL;
-    ctx->nodes.pubNodeId   = UA_NODEID_NULL;
-    ctx->nodes.grpNodeId   = UA_NODEID_NULL;
-    ctx->nodes.dtsNodeId   = UA_NODEID_NULL;
-    ctx->nodes.readGroupId = UA_NODEID_NULL;
-    ctx->nodes.readerId    = UA_NODEID_NULL;
-    ctx->nodes.fieldNodeId = UA_NODEID_NULL;
+    ctx->nodes.subConId           = UA_NODEID_NULL;
+    ctx->nodes.pubConId           = UA_NODEID_NULL;
+    ctx->nodes.subNodeId          = UA_NODEID_NULL;
+    ctx->nodes.pubNodeId          = UA_NODEID_NULL;
+    ctx->nodes.grpNodeId          = UA_NODEID_NULL;
+    ctx->nodes.dtsNodeId          = UA_NODEID_NULL;
+    ctx->nodes.readGroupId        = UA_NODEID_NULL;
+    ctx->nodes.readerId           = UA_NODEID_NULL;
+    ctx->nodes.fieldNodeId        = UA_NODEID_NULL;
     ctx->nodes.publishedDataSetId = UA_NODEID_NULL;
-    ctx->nodes.writerGroupId = UA_NODEID_NULL;
+    ctx->nodes.writerGroupId      = UA_NODEID_NULL;
+
 }
 
 void ServerContextClear(ServerContext *ctx) {
     if(!ctx) return;
-    // Clears transient PubSub session IDs but keeps connection base IDs
-    ctx->nodes.pubNodeId   = UA_NODEID_NULL;
-    ctx->nodes.grpNodeId   = UA_NODEID_NULL;
-    ctx->nodes.readGroupId = UA_NODEID_NULL;
-    ctx->nodes.readerId    = UA_NODEID_NULL;
-    ctx->nodes.dtsNodeId   = UA_NODEID_NULL;
-    ctx->nodes.fieldNodeId = UA_NODEID_NULL;
+    ctx->nodes.pubNodeId          = UA_NODEID_NULL;
+    ctx->nodes.grpNodeId          = UA_NODEID_NULL;
+    ctx->nodes.dtsNodeId          = UA_NODEID_NULL;
+    ctx->nodes.readGroupId        = UA_NODEID_NULL;
+    ctx->nodes.readerId           = UA_NODEID_NULL;
+    ctx->nodes.fieldNodeId        = UA_NODEID_NULL;
     ctx->nodes.publishedDataSetId = UA_NODEID_NULL;
-    ctx->nodes.writerGroupId = UA_NODEID_NULL;
-
-    ctx->identifiers.publisherId = 0;
-    ctx->identifiers.groupId     = 0;
-    ctx->identifiers.writerId    = 0;
-    ctx->identifiers.nsIndex     = 0;
+    ctx->nodes.writerGroupId      = UA_NODEID_NULL;
+    memset(&ctx->identifiers, 0, sizeof(PubSubIdentifiers));
 }
 
 char *ServerContextToString(const ServerContext *ctx) {
     if(!ctx) return NULL;
 
-    UA_String strings[10] = {UA_STRING_NULL};
-    
-    // Helper to extract strings for the NodeIds
-    UA_NodeId_print(&ctx->nodes.subConId,       &strings[0]);
-    UA_NodeId_print(&ctx->nodes.pubConId,       &strings[1]);
-    UA_NodeId_print(&ctx->nodes.subNodeId,   &strings[2]);
-    UA_NodeId_print(&ctx->nodes.pubNodeId,   &strings[3]);
-    UA_NodeId_print(&ctx->nodes.grpNodeId,   &strings[4]);
-    UA_NodeId_print(&ctx->nodes.readGroupId, &strings[5]);
-    UA_NodeId_print(&ctx->nodes.readerId,    &strings[6]);
-    UA_NodeId_print(&ctx->nodes.fieldNodeId, &strings[7]);
-    UA_NodeId_print(&ctx->nodes.publishedDataSetId, &strings[8]);
-    UA_NodeId_print(&ctx->nodes.writerGroupId, &strings[9]);
+    /* 1. Extract strings for all 10 NodeIds */
+    UA_String strings[10];
+    for(int i = 0; i < 10; i++) strings[i] = UA_STRING_NULL;
 
-    size_t bufSize = 1024;
+    UA_NodeId_print(&ctx->nodes.subConId,           &strings[0]);
+    UA_NodeId_print(&ctx->nodes.pubConId,           &strings[1]);
+    UA_NodeId_print(&ctx->nodes.subNodeId,          &strings[2]);
+    UA_NodeId_print(&ctx->nodes.pubNodeId,          &strings[3]);
+    UA_NodeId_print(&ctx->nodes.grpNodeId,          &strings[4]);
+    UA_NodeId_print(&ctx->nodes.readGroupId,        &strings[5]);
+    UA_NodeId_print(&ctx->nodes.readerId,           &strings[6]);
+    UA_NodeId_print(&ctx->nodes.fieldNodeId,        &strings[7]);
+    UA_NodeId_print(&ctx->nodes.publishedDataSetId, &strings[8]);
+    UA_NodeId_print(&ctx->nodes.writerGroupId,      &strings[9]);
+
+    /* 2. Allocate a larger buffer for the full report */
+    size_t bufSize = 2048; 
     char *buf = (char*)UA_malloc(bufSize);
     if(!buf) return NULL;
 
+    /* 3. Build the massive string */
     snprintf(buf, bufSize,
              "ServerContext {\n"
              "  [Nodes]\n"
-             "    subConId       = %.*s\n"
-             "    pubConId       = %.*s\n"
-             "    subNodeId   = %.*s\n"
-             "    pubNodeId   = %.*s\n"
-             "    grpNodeId   = %.*s\n"
-             "    readGroupId = %.*s\n"
-             "    readerId    = %.*s\n"
-             "    fieldNodeId = %.*s\n"
+             "    subConId           = %.*s\n"
+             "    pubConId           = %.*s\n"
+             "    subNodeId          = %.*s\n"
+             "    pubNodeId          = %.*s\n"
+             "    grpNodeId          = %.*s\n"
+             "    readGroupId        = %.*s\n"
+             "    readerId           = %.*s\n"
+             "    fieldNodeId        = %.*s\n"
              "    publishedDataSetId = %.*s\n"
-             "    writerGroupId = %.*s\n"
+             "    writerGroupId      = %.*s\n"
              "  [Identifiers]\n"
-             "    publisherId = %u\n"
-             "    groupId     = %u\n"
-             "    writerId    = %u\n"
-             "    namespace   = %u\n"
+             "    publisherId        = %u\n"
+             "    groupId            = %u\n"
+             "    writerId           = %u\n"
+             "    namespaceIndex     = %u\n"
+             "  [Config (Environment)]\n"
+             "    mqttClientId       = %s\n"
+             "    topic              = %s\n"
+             "    useJson            = %s\n"
+             "    useMqtt            = %s\n"
+             "    metaQueueName      = %s\n"
+             "    metaUpdateTime     = %d\n"
              "}",
+             /* NodeId Strings */
              (int)strings[0].length, (char*)strings[0].data,
              (int)strings[1].length, (char*)strings[1].data,
              (int)strings[2].length, (char*)strings[2].data,
@@ -128,12 +135,24 @@ char *ServerContextToString(const ServerContext *ctx) {
              (int)strings[7].length, (char*)strings[7].data,
              (int)strings[8].length, (char*)strings[8].data,
              (int)strings[9].length, (char*)strings[9].data,
+             /* Identifiers */
              ctx->identifiers.publisherId,
              ctx->identifiers.groupId,
              ctx->identifiers.writerId,
-             ctx->identifiers.nsIndex);
+             ctx->identifiers.nsIndex,
+             /* Config Strings (checking for NULL to avoid crashes) */
+             ctx->config.mqttClientId ? ctx->config.mqttClientId : "NULL",
+             ctx->config.topic ? ctx->config.topic : "NULL",
+             ctx->config.useJson ? "true" : "false",
+             ctx->config.useMqtt ? "true" : "false",
+             ctx->config.metaQueueName ? ctx->config.metaQueueName : "NULL",
+             ctx->config.metaUpdateTime);
 
-    for(int i=0; i<9; i++) UA_String_clear(&strings[i]);
+    /* 4. Cleanup temporary UA_Strings (loop through all 10) */
+    for(int i = 0; i < 10; i++) {
+        UA_String_clear(&strings[i]);
+    }
+
     return buf;
 }
 

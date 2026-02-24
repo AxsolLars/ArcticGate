@@ -91,6 +91,17 @@ int main(int argc, char **argv) {
     UA_NetworkAddressUrlDataType subscribeNetworkAddressUrl = {UA_STRING_NULL, UA_STRING_NULL};
     UA_NetworkAddressUrlDataType publishNetworkAddressUrl = {UA_STRING_NULL, UA_STRING_NULL};
 
+    ServerConfig envConfig;
+    envConfig.useJson = getenv_bool("USE_JSON", true);
+    envConfig.useMqtt = (strcmp(publishProtocol, "MQTT") == 0);
+    envConfig.metaUpdateTime = atoi(getenv("META_UPDATE_TIME") ? getenv("META_UPDATE_TIME") : "0");
+
+    char *mqName = getenv("META_QUEUE_NAME");
+    envConfig.metaQueueName = mqName ? mqName : "MetaData";
+
+    envConfig.mqttClientId = getenv("MQTT_CLIENT_ID") ? getenv("MQTT_CLIENT_ID") : "DefaultClient";
+    envConfig.topic = getenv("PUBLISH_TOPIC") ? getenv("PUBLISH_TOPIC") : "opcua/data";
+
     if (strcmp(subscribeProtocol, "UADP") == 0){
         subscribeTransportProfile =
             UA_STRING("http://opcfoundation.org/UA-Profile/Transport/pubsub-udp-uadp");
@@ -121,7 +132,7 @@ int main(int argc, char **argv) {
     if(strcmp(role, "pub") == 0) {
         return runPublish(&subscribeTransportProfile, &subscribeNetworkAddressUrl, sysConf, number, debug);
     } else if(strcmp(role, "bridge") == 0) {
-        return runServer(&subscribeTransportProfile, &subscribeNetworkAddressUrl, &publishTransportProfile, &publishNetworkAddressUrl, sysConf, debug);
+        return runServer(&subscribeTransportProfile, &subscribeNetworkAddressUrl, &publishTransportProfile, &publishNetworkAddressUrl, sysConf, debug, envConfig);
     } else if (strcmp(role, "sub") == 0) {
         return runSubscribe(&publishTransportProfile, &publishNetworkAddressUrl, sysConf, debug);
     }

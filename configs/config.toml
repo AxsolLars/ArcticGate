@@ -1,20 +1,24 @@
 [[publishers]]
-name = "test"
-publisherId = 41
+name = "PLC0"
+publisherId = 10000
 
 [[publishers.writerGroups]]
-id = 22
+id = 100
 interval = 1000
 name = "Processors / CPU"
 
 [[publishers.writerGroups.dataSets]]
-writerId = 0
+writerId = 105
 name = "core_105"
 fields = [
-    { name = "null", type = "Float" },
-    { name = "eins", type = "UInt32" },
-    { name = "zwei", type = "ByteString" },
-    { name = "drei", type = "Float" },
-    { name = "vier", type = "DateTime" },
-    { name = "fünf", type = "Float" },
+    { name = "coreThermalHeadroom", type = "Float" },
 ]
+
+
+[[publishers.writerGroups.dataSets]]
+writerId = 205
+name = "core_205"
+fields = [
+    { name = "20coreThermalHeadroom", type = "Float" },
+]
+

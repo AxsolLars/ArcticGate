@@ -268,8 +268,10 @@ addPubSubConnection(UA_Server *server, UA_String *transportProfile,
 
     
     /* On Subscriber side the publisherId doesn't matter at first*/
-    connectionConfig.publisherIdType = UA_PUBLISHERIDTYPE_UINT32;
-    connectionConfig.publisherId.uint32 = UA_UInt32_random();
+    UA_UInt16 pubId = UA_UInt16_random();
+    UA_Variant_setScalarCopy(&connectionConfig.publisherId, &pubId,
+                            &UA_TYPES[UA_TYPES_UINT16]);
+    
     
     /* Sets the ConnectionId*/
     retval |= UA_Server_addPubSubConnection (server, &connectionConfig, &ids->conId);
