@@ -9,30 +9,30 @@ RUN apt-get update && apt-get install -y \
 
 # ---- build open62541 ----
 WORKDIR /deps
-COPY server/open62541/ .   
-RUN rm -rf /deps/build
-RUN cmake -B /deps/build -S . \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DUA_BUILD_EXAMPLES=OFF \
-    -DUA_BUILD_TOOLS=OFF \
-    -DUA_ENABLE_PUBSUB=ON \
-    -DUA_ENABLE_MQTT=ON \
-    -DUA_ENABLE_PUBSUB_MQTT=ON \
-    -DUA_ENABLE_JSON_ENCODING=ON && \
-    cmake --build /deps/build -j $(nproc) && \
-    cmake --install /deps/build --prefix /usr/local
-# RUN git clone --recursive --branch v1.5.2 https://github.com/open62541/open62541.git && \
-#     cd open62541 && \
-#     cmake -B ../build -S . \
-#     -DCMAKE_BUILD_TYPE=Release \
-#     -DUA_BUILD_EXAMPLES=OFF \
-#     -DUA_BUILD_TOOLS=OFF \
-#     -DUA_ENABLE_PUBSUB=ON \
-#     -DUA_ENABLE_MQTT=ON \
-#     -DUA_ENABLE_PUBSUB_MQTT=ON \
-#     -DUA_ENABLE_JSON_ENCODING=ON && \
-#     cmake --build ../build -j $(nproc) && \
-#     cmake --install ../build --prefix /usr/local
+#COPY server/open62541/ .   
+#RUN rm -rf /deps/build
+#RUN cmake -B /deps/build -S . \
+#    -DCMAKE_BUILD_TYPE=Release \
+#    -DUA_BUILD_EXAMPLES=OFF \
+#    -DUA_BUILD_TOOLS=OFF \
+#    -DUA_ENABLE_PUBSUB=ON \
+#    -DUA_ENABLE_MQTT=ON \
+#    -DUA_ENABLE_PUBSUB_MQTT=ON \
+#    -DUA_ENABLE_JSON_ENCODING=ON && \
+#    cmake --build /deps/build -j $(nproc) && \
+#    cmake --install /deps/build --prefix /usr/local
+ RUN git clone --recursive --branch v1.5.2 https://github.com/open62541/open62541.git && \
+     cd open62541 && \
+     cmake -B ../build -S . \
+     -DCMAKE_BUILD_TYPE=Release \
+     -DUA_BUILD_EXAMPLES=OFF \
+     -DUA_BUILD_TOOLS=OFF \
+     -DUA_ENABLE_PUBSUB=ON \
+     -DUA_ENABLE_MQTT=ON \
+     -DUA_ENABLE_PUBSUB_MQTT=ON \
+     -DUA_ENABLE_JSON_ENCODING=ON && \
+     cmake --build ../build -j $(nproc) && \
+     cmake --install ../build --prefix /usr/local
 
 # ---- build your app ----
 WORKDIR /src

@@ -8,4 +8,9 @@
 scripts/.venv/
 
 # Ignore open62541 build/output (entire folder)
+server/open62541/
+
 mosquitto/*
+
+server/pubsub/build
+server/pubsub/scripts
