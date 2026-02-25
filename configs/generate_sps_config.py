@@ -39,7 +39,14 @@ def generate(
         field_type =  "Real"
 
     lines: list[str] = []
+    lines.append("[[publishers]]")
+    lines.append("name = \"PLC0\"")
+    lines.append("publisherId = 41")
 
+    lines.append("[[publishers.writerGroups]]")
+    lines.append("id = 22")
+    lines.append("interval = 500")
+    lines.append("name = \"Group\"")
     for i in range(writer_count):
         writer_id = writer_id_start + i
         lines.append("[[publisher.writerGroup.dataSets]]")
