@@ -49,8 +49,7 @@ def generate(
 
         for f in range(fields_per_writer):
             ftype = field_type
-            comma = "," if f < fields_per_writer - 1 else ""
-            lines.append(f'  {{ name = "{writer_id}_{f}", type = "{ftype}" }}{comma}')
+            lines.append(f'  {{ name = "{writer_id}_{f}", type = "{ftype}" }},')
 
         lines.append("]")
         lines.append("")  # blank line between writers
