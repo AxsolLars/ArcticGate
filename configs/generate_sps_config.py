@@ -26,7 +26,7 @@ from pathlib import Path
 def generate(
     writer_count: int = 10,
     fields_per_writer: int = 2,
-    field_types: list[str] | None = None,
+    field_type: str | None = None,
     writer_id_start: int = 0,
     name_prefix: str = "writer_",
 ) -> str:
@@ -35,8 +35,8 @@ def generate(
       - If provided, types are assigned by index and cycled if fields_per_writer > len(field_types)
       - If omitted, defaults to ["Long", "Real"] (cycled)
     """
-    if not field_types:
-        field_types = ["Long", "Real"]
+    if not field_type:
+        field_type =  "Real"
 
     lines: list[str] = []
 
@@ -48,7 +48,7 @@ def generate(
         lines.append("fields = [")
 
         for f in range(fields_per_writer):
-            ftype = field_types[f % len(field_types)]
+            ftype = field_type
             comma = "," if f < fields_per_writer - 1 else ""
             lines.append(f'  {{ name = "{writer_id}_{f}", type = "{ftype}" }}{comma}')
 
@@ -63,7 +63,7 @@ def main() -> None:
     ap.add_argument("--out", type=Path, default=Path("config.toml"), help="output file path")
     ap.add_argument("--writers", type=int, default=10, help="number of writers/datasets to generate")
     ap.add_argument("--fields", type=int, default=2, help="number of fields per writer")
-    ap.add_argument("--types", nargs="*", default=None, help='field types (cycled), e.g. --types Long Real')
+    ap.add_argument("--type", nargs="*", default="Real", help='field types (cycled), e.g. --types Real')
     ap.add_argument("--writer-id-start", type=int, default=0, help="starting writerId")
     ap.add_argument("--name-prefix", type=str, default="writer_", help='dataset name prefix, default "writer_"')
     args = ap.parse_args()
@@ -71,7 +71,7 @@ def main() -> None:
     toml_text = generate(
         writer_count=args.writers,
         fields_per_writer=args.fields,
-        field_types=args.types,
+        field_type=args.types,
         writer_id_start=args.writer_id_start,
         name_prefix=args.name_prefix,
     )
