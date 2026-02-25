@@ -49,7 +49,7 @@ def generate(
     lines.append("name = \"Group\"")
     for i in range(writer_count):
         writer_id = writer_id_start + i
-        lines.append("[[publisher.writerGroup.dataSets]]")
+        lines.append("[[publishers.writerGroups.dataSets]]")
         lines.append(f"writerId = {writer_id}")
         lines.append(f'name = "{name_prefix}{writer_id}"')
         lines.append("fields = [")

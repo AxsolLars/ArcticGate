@@ -5,7 +5,7 @@ publisherId = 41
 id = 22
 interval = 500
 name = "Group"
-[[publisher.writerGroup.dataSets]]
+[[publishers.writerGroups.dataSets]]
 writerId = 0
 name = "writer_0"
 fields = [
@@ -13,7 +13,7 @@ fields = [
   { name = "0_1", type = "Real" },
 ]
 
-[[publisher.writerGroup.dataSets]]
+[[publishers.writerGroups.dataSets]]
 writerId = 1
 name = "writer_1"
 fields = [
@@ -21,7 +21,7 @@ fields = [
   { name = "1_1", type = "Real" },
 ]
 
-[[publisher.writerGroup.dataSets]]
+[[publishers.writerGroups.dataSets]]
 writerId = 2
 name = "writer_2"
 fields = [
@@ -29,7 +29,7 @@ fields = [
   { name = "2_1", type = "Real" },
 ]
 
-[[publisher.writerGroup.dataSets]]
+[[publishers.writerGroups.dataSets]]
 writerId = 3
 name = "writer_3"
 fields = [
@@ -37,7 +37,7 @@ fields = [
   { name = "3_1", type = "Real" },
 ]
 
-[[publisher.writerGroup.dataSets]]
+[[publishers.writerGroups.dataSets]]
 writerId = 4
 name = "writer_4"
 fields = [
@@ -45,7 +45,7 @@ fields = [
   { name = "4_1", type = "Real" },
 ]
 
-[[publisher.writerGroup.dataSets]]
+[[publishers.writerGroups.dataSets]]
 writerId = 5
 name = "writer_5"
 fields = [
@@ -53,7 +53,7 @@ fields = [
   { name = "5_1", type = "Real" },
 ]
 
-[[publisher.writerGroup.dataSets]]
+[[publishers.writerGroups.dataSets]]
 writerId = 6
 name = "writer_6"
 fields = [
@@ -61,7 +61,7 @@ fields = [
   { name = "6_1", type = "Real" },
 ]
 
-[[publisher.writerGroup.dataSets]]
+[[publishers.writerGroups.dataSets]]
 writerId = 7
 name = "writer_7"
 fields = [
@@ -69,7 +69,7 @@ fields = [
   { name = "7_1", type = "Real" },
 ]
 
-[[publisher.writerGroup.dataSets]]
+[[publishers.writerGroups.dataSets]]
 writerId = 8
 name = "writer_8"
 fields = [
@@ -77,7 +77,7 @@ fields = [
   { name = "8_1", type = "Real" },
 ]
 
-[[publisher.writerGroup.dataSets]]
+[[publishers.writerGroups.dataSets]]
 writerId = 9
 name = "writer_9"
 fields = [
