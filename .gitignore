@@ -9,6 +9,3 @@ scripts/.venv/
 
 # Ignore open62541 build/output (entire folder)
 mosquitto/*
-
-server/pubsub/build
-server/pubsub/scripts

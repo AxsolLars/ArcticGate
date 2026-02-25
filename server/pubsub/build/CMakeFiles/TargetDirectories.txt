@@ -1,0 +1,3 @@
+/home/Lars/ArcticGate/server/pubsub/build/CMakeFiles/opcua_pubsub.dir
+/home/Lars/ArcticGate/server/pubsub/build/CMakeFiles/edit_cache.dir
+/home/Lars/ArcticGate/server/pubsub/build/CMakeFiles/rebuild_cache.dir
