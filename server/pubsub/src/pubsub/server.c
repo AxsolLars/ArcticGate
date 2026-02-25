@@ -331,11 +331,18 @@ int runServer(
         
         // Start Recursive construction with Systemstemconfig
         retval |= Server_addSysConfig(server, sysConf, ctx);
+        
         if (retval != UA_STATUSCODE_GOOD){
             UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "SysConfig failed");
             return EXIT_FAILURE;
         } else {
             UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "SERVER STARTING...");
+            retval = UA_Server_enableAllPubSubComponents(server);
+            if (retval != UA_STATUSCODE_GOOD){
+                UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "enabling all PubSub Components failed: 0x%08x", retval);
+            } else {
+                UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "Enabling all PubSub Components succeded");
+            }
             retval |= UA_Server_runUntilInterrupt(server);
         }
         

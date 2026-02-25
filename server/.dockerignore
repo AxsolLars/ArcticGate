@@ -3,3 +3,5 @@ pubsub/build/
 *.log
 **/build/
 my-server/
+**/CMakeCache.txt
+**/CMakeFiles/

@@ -43,7 +43,6 @@ Pub_addDataSetWriter(UA_Server * server, Pub_IdCollection * ids, char* name){
     memset(&dswConf, 0, sizeof(dswConf));
     dswConf.name = UA_STRING(name);
     dswConf.dataSetWriterId = ids->writerId;
-
     UA_NodeId dswId;
     retval |= UA_Server_addDataSetWriter(server,ids->writerGroupId, ids->publishedDataSetId, &dswConf, &dswId);
     if (retval != UA_STATUSCODE_GOOD) {
@@ -139,40 +138,31 @@ return retval;
 }
 
 
-void
-Pub_initializeWriterGroupMessage(UA_WriterGroupConfig * writerGroupConfig, UA_UadpWriterGroupMessageDataType *writerGroupMessage){
-    writerGroupMessage->networkMessageContentMask = UA_UADPNETWORKMESSAGECONTENTMASK_PUBLISHERID |
-    UA_UADPNETWORKMESSAGECONTENTMASK_GROUPHEADER |
-    UA_UADPNETWORKMESSAGECONTENTMASK_WRITERGROUPID |
-    UA_UADPNETWORKMESSAGECONTENTMASK_PAYLOADHEADER |
-    UA_UADPNETWORKMESSAGECONTENTMASK_DATASETCLASSID;
-    writerGroupConfig->messageSettings.content.decoded.data = writerGroupMessage;
-}
-void
-Pub_initializeWriterGroupConfig(UA_WriterGroupConfig* writerGroupConfig, Pub_IdCollection * ids, int interval, char * groupName){
-    memset(writerGroupConfig, 0, sizeof(UA_WriterGroupConfig));
-
-    writerGroupConfig->name = UA_String_fromChars(groupName);
-    writerGroupConfig->publishingInterval = interval;
-    writerGroupConfig->enabled = UA_TRUE;
-    writerGroupConfig->writerGroupId = ids->groupId;
-    writerGroupConfig->encodingMimeType = UA_PUBSUB_ENCODING_UADP;
-    writerGroupConfig->messageSettings.encoding             = UA_EXTENSIONOBJECT_DECODED;
-    writerGroupConfig->messageSettings.content.decoded.type = &UA_TYPES[UA_TYPES_UADPWRITERGROUPMESSAGEDATATYPE];
-}
-
 UA_StatusCode
 Pub_addWriterGroup(UA_Server *server, Pub_IdCollection * ids, int interval, char * groupName) {
     UA_StatusCode retval = UA_STATUSCODE_GOOD;
 
 
     UA_WriterGroupConfig writerGroupConfig;
-    Pub_initializeWriterGroupConfig(&writerGroupConfig, ids, interval, groupName);
+    memset(&writerGroupConfig, 0, sizeof(UA_WriterGroupConfig));
+
+    writerGroupConfig.name = UA_String_fromChars(groupName);
+    writerGroupConfig.publishingInterval = interval;
+    writerGroupConfig.writerGroupId = ids->groupId;
+    writerGroupConfig.encodingMimeType = UA_PUBSUB_ENCODING_UADP;
+    writerGroupConfig.messageSettings.encoding             = UA_EXTENSIONOBJECT_DECODED;
+    writerGroupConfig.messageSettings.content.decoded.type = &UA_TYPES[UA_TYPES_UADPWRITERGROUPMESSAGEDATATYPE];
 
 
-    UA_UadpWriterGroupMessageDataType *writerGroupMessage  = UA_UadpWriterGroupMessageDataType_new();
-    Pub_initializeWriterGroupMessage(&writerGroupConfig, writerGroupMessage);
-
+    UA_UadpWriterGroupMessageDataType writerGroupMessage;
+    UA_UadpWriterGroupMessageDataType_init(&writerGroupMessage);
+    writerGroupMessage.networkMessageContentMask = UA_UADPNETWORKMESSAGECONTENTMASK_PUBLISHERID |
+    UA_UADPNETWORKMESSAGECONTENTMASK_GROUPHEADER |
+    UA_UADPNETWORKMESSAGECONTENTMASK_WRITERGROUPID |
+    UA_UADPNETWORKMESSAGECONTENTMASK_PAYLOADHEADER |
+    UA_UADPNETWORKMESSAGECONTENTMASK_DATASETCLASSID;
+    UA_ExtensionObject_setValue(&writerGroupConfig.messageSettings, &writerGroupMessage,
+                                &UA_TYPES[UA_TYPES_UADPWRITERGROUPMESSAGEDATATYPE]);
 
     retval = UA_Server_addWriterGroup(server, ids->conId, &writerGroupConfig, &ids->writerGroupId);
 
@@ -192,8 +182,6 @@ Pub_addWriterGroup(UA_Server *server, Pub_IdCollection * ids, int interval, char
 }
 
 
-    retval = UA_Server_setWriterGroupOperational(server, ids->writerGroupId);
-
     if (retval != UA_STATUSCODE_GOOD) {
         UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
                     "Setting WriterGroup (ns=%u; i=%u) operational failed: 0x%08x (%s)",
@@ -204,8 +192,6 @@ Pub_addWriterGroup(UA_Server *server, Pub_IdCollection * ids, int interval, char
         return retval;
     }
 
-
-    UA_UadpWriterGroupMessageDataType_delete(writerGroupMessage);
     return retval;
 }
 
@@ -230,8 +216,8 @@ Pub_addPubSubConnection(UA_Server *server, UA_String *transportProfile,
 
     
     UA_UInt16 pubId = (UA_UInt16)ids->publisherId;
-    UA_Variant_setScalarCopy(&connectionConfig.publisherId, &pubId,
-                            &UA_TYPES[UA_TYPES_UINT16]);
+    connectionConfig.publisherId.idType = UA_PUBLISHERIDTYPE_UINT16;
+    connectionConfig.publisherId.id.uint16 = pubId;
     
     printf("publisherId %u\n", connectionConfig.publisherId);
     return UA_Server_addPubSubConnection (server, &connectionConfig, &ids->conId);

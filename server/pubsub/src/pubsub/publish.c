@@ -88,7 +88,7 @@ int runPublish(UA_String *transportProfile,
     retval |= Pub_addPubSubConnection(server, transportProfile, networkAddressUrl, ids, publisher->name);
     
     retval |= Pub_addConf(server, publisher, ids);
-
+    UA_Server_enableAllPubSubComponents(server);
     UA_ServerConfig *configs = UA_Server_getConfig(server);
 
     retval |= UA_Server_runUntilInterrupt(server);

@@ -33,5 +33,6 @@
         "UADPDATASETREADERMESSAGEDATATYPE",
         "UADPNETWORKMESSAGECONTENTMASK",
         "WRITERGROUPID"
-    ]
+    ],
+    "search.useIgnoreFiles": false
 }

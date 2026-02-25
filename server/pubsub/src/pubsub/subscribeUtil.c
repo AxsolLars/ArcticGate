@@ -78,8 +78,9 @@ void fillFields(UA_DataSetMetaDataType *pMetaData, FieldConfig ** fieldConfs, si
 UA_StatusCode 
 addValueAttributes(UA_Server * server, UA_DataSetReaderConfig * readerConfig, Sub_IdCollection * ids){
     UA_StatusCode retval = UA_STATUSCODE_GOOD;
-    UA_FieldTargetVariable *targetVars = (UA_FieldTargetVariable *)
-        UA_calloc(readerConfig->dataSetMetaData.fieldsSize, sizeof(UA_FieldTargetVariable));
+    UA_FieldTargetDataType *targetVars =
+    (UA_FieldTargetDataType*)UA_calloc(readerConfig->dataSetMetaData.fieldsSize,
+                                       sizeof(UA_FieldTargetDataType));
     // printf("FIELD ID: %d\n", (ids->writerId * 100));
     // fflush(stdout); 
     for(size_t i = 0; i < readerConfig->dataSetMetaData.fieldsSize; i++) {
@@ -113,17 +114,17 @@ addValueAttributes(UA_Server * server, UA_DataSetReaderConfig * readerConfig, Su
                                            vAttr, NULL, &newNode);
 
         
-        UA_FieldTargetDataType_init(&targetVars[i].targetVariable);
-        targetVars[i].targetVariable.attributeId  = UA_ATTRIBUTEID_VALUE;
-        targetVars[i].targetVariable.targetNodeId = newNode;
+        UA_FieldTargetDataType_init(&targetVars[i]);
+        targetVars[i].attributeId = UA_ATTRIBUTEID_VALUE;
+        targetVars[i].targetNodeId = newNode;
     }
 
     retval = UA_Server_DataSetReader_createTargetVariables(server, ids->readerId,
                                                            readerConfig->dataSetMetaData.fieldsSize, targetVars);
     for(size_t i = 0; i < readerConfig->dataSetMetaData.fieldsSize; i++)
-        UA_FieldTargetDataType_clear(&targetVars[i].targetVariable);
-
-    return retval;
+        UA_FieldTargetDataType_clear(&targetVars[i]);
+    UA_free(targetVars);    
+    return retval;  
 }
 
 UA_StatusCode
@@ -137,10 +138,8 @@ addDataSetReader(UA_Server *server, Sub_IdCollection * ids, char * dataSetName, 
     snprintf(buf, sizeof(buf), "Group %u", ids->groupId);
     readerConfig->name = UA_STRING_ALLOC(buf);
 
-    printf("%u", ids->publisherId);
-    UA_Variant_setScalarCopy(&readerConfig->publisherId,
-                         &ids->publisherId,
-                         &UA_TYPES[UA_TYPES_UINT32]);
+    readerConfig->publisherId.idType = UA_PUBLISHERIDTYPE_UINT16;
+    readerConfig->publisherId.id.uint16 = ids->publisherId;
     readerConfig->writerGroupId    = ids->groupId;
     readerConfig->dataSetWriterId  = ids->writerId;
     UA_UadpDataSetReaderMessageDataType *msgSettings = UA_UadpDataSetReaderMessageDataType_new();
@@ -268,9 +267,9 @@ addPubSubConnection(UA_Server *server, UA_String *transportProfile,
 
     
     /* On Subscriber side the publisherId doesn't matter at first*/
-    UA_UInt16 pubId = UA_UInt16_random();
-    UA_Variant_setScalarCopy(&connectionConfig.publisherId, &pubId,
-                            &UA_TYPES[UA_TYPES_UINT16]);
+    UA_UInt16 pubId = (UA_UInt16)(UA_UInt32_random() & 0xFFFFu);
+    connectionConfig.publisherId.idType = UA_PUBLISHERIDTYPE_UINT16;
+    connectionConfig.publisherId.id.uint16 = pubId;
     
     
     /* Sets the ConnectionId*/
