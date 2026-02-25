@@ -71,7 +71,7 @@ def main() -> None:
     toml_text = generate(
         writer_count=args.writers,
         fields_per_writer=args.fields,
-        field_type=args.types,
+        field_type=args.type,
         writer_id_start=args.writer_id_start,
         name_prefix=args.name_prefix,
     )
